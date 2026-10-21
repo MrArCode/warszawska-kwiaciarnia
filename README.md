@@ -16,6 +16,20 @@ Każdy wariant można też otworzyć bezpośrednio z linku:
 
 Dodatek `&review=1` pokazuje w rogu etykietę z nazwą aktualnej wersji (przydatne przy omawianiu).
 
+## Trzy poziomy animacji do porównania
+
+Drugi przełącznik (kwiatki obok kółek z kolorami) albo parametr `?motion=` w adresie. Poziomy się sumują,
+a odcień różu i poziom animacji łączą się dowolnie, np. `…/?theme=pastel&motion=3`.
+
+| Poziom | Co się dzieje | Link |
+|---|---|---|
+| 1 Spokojny (domyślny) | powolne przybliżanie zdjęcia w hero, unoszenie kart po najechaniu, pulsująca kropka „otwarte”, animowane podkreślenia | `…/?motion=1` |
+| 2 Kwitnący | wejście z rysującym się lotosem, płatki opadające w hero, sekcje wchodzą z rozmyciem, karty oferty jedna po drugiej | `…/?motion=2` |
+| 3 Pełnia | płatki na całej stronie, lotos we wejściu „rozkwita”, parallaksa zdjęcia hero i plam w tle, ocena nabija się licznikiem, gałązki rysujące się między sekcjami, okazje „rozkwitają” po najechaniu | `…/?motion=3` |
+
+Wejście z logo pokazuje się raz na sesję przeglądarki i po każdej zmianie poziomu; kliknięcie je pomija.
+Przy włączonym w systemie ograniczeniu ruchu strona zawsze działa na poziomie 1 bez wejścia.
+
 ## Jak uruchomić lokalnie
 
 Wystarczy otworzyć `index.html` w przeglądarce. Jeśli wolisz serwer:
@@ -31,7 +45,8 @@ i wejść na <http://localhost:8321>.
 ```
 index.html            cała treść strony (sekcje oznaczone komentarzami)
 assets/css/styles.css style; warianty koloru = trzy bloki zmiennych na górze pliku
-assets/js/main.js     przełącznik motywów, „otwarte teraz”, lightbox, mapa po kliknięciu
+assets/js/main.js     przełącznik odcieni, „otwarte teraz”, lightbox, mapa po kliknięciu
+assets/js/motion.js   poziomy animacji: wejście z logo, płatki, parallaksa, licznik, gałązki
 assets/img/           zdjęcia (WebP) ze starej strony i Instagrama kwiaciarni, logo, favicon, og.jpg
 ```
 
@@ -63,7 +78,8 @@ Na telefonie stały dolny pasek: Zadzwoń · Instagram · Dojazd.
 ## Przed wdrożeniem produkcyjnym
 
 - [ ] Usunąć `<meta name="robots" content="noindex">` z `index.html`.
-- [ ] Usunąć przełącznik wariantów (`.theme-switch` w HTML, blok 1 w `main.js`, skrypt w `<head>`), zostawić jeden `data-theme` na `<html>` i jeden blok zmiennych w CSS.
+- [ ] Usunąć przełączniki prototypu (`.proto-controls` w HTML, blok 1 w `main.js`, część skryptu w `<head>`), zostawić jeden `data-theme` na `<html>` i jeden blok zmiennych w CSS.
+- [ ] Wybrać jeden poziom animacji: wpisać go na stałe w `data-motion` na `<html>`; przy poziomie 1 można usunąć `motion.js` i blok „wejście z logo” z HTML.
 - [ ] Ustawić absolutny adres w `og:image` (po ustaleniu domeny).
 - [ ] Wkleić aktualne opinie i liczby z Google.
 - [ ] Jeśli strona ma iść pod własną domenę: plik `CNAME` w repo i rekordy DNS u operatora domeny.
