@@ -267,9 +267,7 @@ section { scroll-margin-top: 72px; }
   }
   .hero__media { order: 2; aspect-ratio: auto; max-height: none; height: 100%; }
   .hero__cta { flex-direction: row; flex-wrap: wrap; }
-  .hero__media::after {
-    background: linear-gradient(to right, rgba(var(--bg-rgb), .9), transparent 22%), linear-gradient(to top, rgba(var(--bg-rgb), .35), transparent 40%);
-  }
+  .hero__media::after { display: none; } /* na desktopie zdjęcie bez mlecznego przejścia */
 }
 
 /* ---------- JAK ZAMÓWIĆ ---------- */
