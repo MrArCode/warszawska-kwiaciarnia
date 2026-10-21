@@ -21,7 +21,7 @@
   }
 
   if (root.classList.contains('intro-pending')) {
-    timer = setTimeout(finishIntro, 2700);
+    timer = setTimeout(finishIntro, 2300);
     // nasłuch dopiero po chwili, żeby pierwsze kliknięcie nie przerwało wejścia od razu
     setTimeout(function () {
       doc.addEventListener('click', finishIntro);
@@ -32,7 +32,7 @@
   var cards = doc.querySelectorAll('.offer__grid > li[data-reveal]');
   Array.prototype.forEach.call(cards, function (li, i) {
     if (li.classList.contains('is-visible')) return;
-    li.style.transitionDelay = (i * 90) + 'ms';
+    li.style.transitionDelay = (i * 60) + 'ms';
     li.addEventListener('transitionend', function clear() {
       li.style.transitionDelay = '';
       li.removeEventListener('transitionend', clear);
