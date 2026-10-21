@@ -26,15 +26,18 @@
       var theme = t.indexOf(u) > -1 ? u : (t.indexOf(s) > -1 ? s : 'pastel');
       document.documentElement.setAttribute('data-theme', theme);
       document.documentElement.className += ' js';
+      // wstępne ładowanie zdjęcia hero właściwego dla motywu
+      var HERO = { pastel: 'assets/img/hero-pastel.webp', botanical: 'assets/img/hero-biale-roze.webp', premium: 'assets/img/mono-czerwone-roze.webp' };
+      var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = HERO[theme]; l.setAttribute('fetchpriority', 'high');
+      document.head.appendChild(l);
     })();
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Prototyp ładuje fonty wszystkich trzech motywów. Po wyborze motywu zostawić tylko jego dwie rodziny. -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Cormorant:wght@300;400;500&family=Jost:wght@400;500&family=Nunito:wght@400;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Cormorant:wght@300;400;500&family=Jost:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="preload" as="image" href="assets/img/hero-pastel.webp">
 
   <script type="application/ld+json">
   {
@@ -73,6 +76,7 @@
       { "@type": "Question", "name": "Czy dowozicie kwiaty?", "acceptedAnswer": { "@type": "Answer", "text": "Tak, na terenie Warszawy i okolic. Koszt i godzinę ustalamy przy zamówieniu telefonicznym." } },
       { "@type": "Question", "name": "Czy mogę zamówić bukiet na konkretny dzień?", "acceptedAnswer": { "@type": "Answer", "text": "Tak. Zadzwoń lub napisz na Instagramie, podaj datę, okazję i budżet. Na duże zamówienia i śluby prosimy o 2–3 tygodnie." } },
       { "@type": "Question", "name": "Czy robicie bukiety na poczekaniu?", "acceptedAnswer": { "@type": "Answer", "text": "Tak. Przyjdź, powiedz, na jaką okazję i jaki budżet, a bukiet zwiążemy przy tobie." } },
+      { "@type": "Question", "name": "Ile kosztuje bukiet?", "acceptedAnswer": { "@type": "Answer", "text": "Bukiety zaczynają się od ok. 100 zł, flower boxy to 120–140 zł, a bukiety premium 300–400 zł. Powiedz nam budżet i okazję, a dobierzemy kwiaty tak, żeby się zmieścić." } },
       { "@type": "Question", "name": "Czy można kupić online?", "acceptedAnswer": { "@type": "Answer", "text": "Nie prowadzimy sklepu internetowego. Zamówienia przyjmujemy telefonicznie, na Instagramie i na miejscu." } }
     ]
   }
@@ -153,7 +157,7 @@
             <a class="btn btn--primary btn--lg" href="tel:+48791481738" aria-label="Zadzwoń: 791 481 738">
               <svg aria-hidden="true"><use href="#i-phone"/></svg> Zadzwoń
             </a>
-            <a class="btn btn--secondary btn--lg" href="https://www.instagram.com/warszawskakwiaciarnia/" target="_blank" rel="noopener">
+            <a class="btn btn--secondary btn--lg" href="https://ig.me/m/warszawskakwiaciarnia" target="_blank" rel="noopener">
               <svg aria-hidden="true"><use href="#i-instagram"/></svg> Napisz na Instagramie<span class="sr-only"> (otwiera się w nowej karcie)</span>
             </a>
           </div>
@@ -165,11 +169,19 @@
         <div class="hero__media">
           <!-- Jedno zdjęcie na motyw. Jeśli chcesz jedno dla wszystkich, usuń atrybuty data-src-*. -->
           <img class="hero__img" src="assets/img/hero-pastel.webp" width="750" height="1000"
-               data-src-pastel="assets/img/hero-pastel.webp"
-               data-src-botanical="assets/img/hero-biale-roze.webp"
-               data-src-premium="assets/img/mono-czerwone-roze.webp"
+               data-src-pastel="assets/img/hero-pastel.webp" data-alt-pastel="Bukiet pastelowych róż, hortensji i eustomy w różowym papierze, Warszawska Kwiaciarnia"
+               data-src-botanical="assets/img/hero-biale-roze.webp" data-alt-botanical="Bukiet białych róż w jasnym papierze z botanicznym wzorem, Warszawska Kwiaciarnia"
+               data-src-premium="assets/img/mono-czerwone-roze.webp" data-alt-premium="Bukiet czerwonych róż w bordowym papierze, Warszawska Kwiaciarnia"
                alt="Bukiet pastelowych róż, hortensji i eustomy w różowym papierze, Warszawska Kwiaciarnia"
                fetchpriority="high" decoding="async">
+          <script>
+            // Podmiana zdjęcia hero na właściwe dla motywu jeszcze przed pierwszym rysowaniem.
+            (function () {
+              var img = document.currentScript.previousElementSibling, t = document.documentElement.getAttribute('data-theme');
+              var s = img.getAttribute('data-src-' + t), a = img.getAttribute('data-alt-' + t);
+              if (s) img.setAttribute('src', s); if (a) img.setAttribute('alt', a);
+            })();
+          </script>
         </div>
       </div>
     </section>
@@ -183,7 +195,7 @@
           <span class="how__title">Zamów telefonicznie</span>
           <span class="how__text">791 481 738, codziennie w godzinach otwarcia</span>
         </a>
-        <a class="how__item" href="https://www.instagram.com/warszawskakwiaciarnia/" target="_blank" rel="noopener">
+        <a class="how__item" href="https://ig.me/m/warszawskakwiaciarnia" target="_blank" rel="noopener">
           <svg class="how__icon" aria-hidden="true"><use href="#i-instagram"/></svg>
           <span class="how__title">Napisz na Instagramie</span>
           <span class="how__text">Wyślij zdjęcie lub opisz okazję – odpiszemy<span class="sr-only"> (otwiera się w nowej karcie)</span></span>
@@ -210,57 +222,58 @@
           <p class="lead">Kwiaty na co dzień i na wielkie dni. Wiążemy bukiety, w których widać rękę florystki, a nie katalog. Powiedz, dla kogo i na jaką okazję – dobierzemy kwiaty, kolory i budżet.</p>
         </header>
 
+        <p class="occasions"><span class="sr-only">Okazje: </span>Urodziny <span aria-hidden="true">✿</span> Imieniny <span aria-hidden="true">✿</span> Rocznica <span aria-hidden="true">✿</span> Narodziny <span aria-hidden="true">✿</span> Podziękowanie <span aria-hidden="true">✿</span> Kondolencje <span aria-hidden="true">✿</span> Bez okazji</p>
         <p class="offer__hint" aria-hidden="true">przesuń <span>→</span></p>
-        <ul class="offer__grid" aria-label="Oferta – na telefonie przewiń w bok">
+        <ul class="offer__grid" aria-label="Oferta">
           <li class="card" data-reveal>
-            <a class="card__link" href="tel:+48791481738" aria-label="Bukiety na każdą okazję, od 100 zł – zamów telefonicznie">
+            <a class="card__link" href="tel:+48791481738" aria-label="Zamów bukiet: Bukiety na każdą okazję, od 100 zł – telefonicznie">
               <span class="card__media"><img src="assets/img/bukiet-flamingo.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Mieszany bukiet różowych róż, goździków i eustomy w jasnym papierze"></span>
               <span class="card__body">
                 <span class="card__title">Bukiety na każdą okazję</span>
                 <span class="card__text">Urodziny, imieniny, podziękowanie, „tak po prostu”. Mówisz budżet – my resztę.</span>
-                <span class="card__price">od 100 zł</span>
+                <span class="card__price"><small>od</small> 100&nbsp;zł</span>
                 <span class="card__cta">Zamów bukiet <span aria-hidden="true">→</span></span>
               </span>
             </a>
           </li>
           <li class="card" data-reveal>
-            <a class="card__link" href="tel:+48791481738" aria-label="Flower boxy, 120–140 zł – zamów telefonicznie">
-              <span class="card__media"><img src="assets/img/box-bombastic.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Flower box z jasnoróżowych róż Bombastic w białym pudełku"></span>
+            <a class="card__link" href="tel:+48791481738" aria-label="Zamów bukiet: Flower boxy, 120–140 zł – telefonicznie">
+              <span class="card__media"><img src="assets/img/box-bombastic.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Flower box z jasnoróżowych róż Bombastic w jasnoróżowym pudełku"></span>
               <span class="card__body">
                 <span class="card__title">Flower boxy</span>
                 <span class="card__text">Kwiaty w pudełku – prezent, który nie wymaga wazonu. Trzymają świeżość dłużej niż bukiet.</span>
-                <span class="card__price">120–140 zł</span>
+                <span class="card__price">120–140&nbsp;zł</span>
                 <span class="card__cta">Zamów bukiet <span aria-hidden="true">→</span></span>
               </span>
             </a>
           </li>
           <li class="card" data-reveal>
-            <a class="card__link" href="tel:+48791481738" aria-label="Bukiety mono, od 100 zł – zamów telefonicznie">
+            <a class="card__link" href="tel:+48791481738" aria-label="Zamów bukiet: Bukiety mono, od 75 zł – telefonicznie">
               <span class="card__media"><img src="assets/img/mono-tulipany.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Duży bukiet fioletowych, różowych i białych tulipanów w różowym papierze"></span>
               <span class="card__body">
                 <span class="card__title">Bukiety mono</span>
                 <span class="card__text">Same róże, same tulipany albo chmura gipsówki. Prosto i efektownie.</span>
-                <span class="card__price">od 100 zł</span>
+                <span class="card__price"><small>od</small> 75&nbsp;zł</span>
                 <span class="card__cta">Zamów bukiet <span aria-hidden="true">→</span></span>
               </span>
             </a>
           </li>
           <li class="card" data-reveal>
-            <a class="card__link" href="tel:+48791481738" aria-label="Bukiety premium, 300–400 zł – zamów telefonicznie">
+            <a class="card__link" href="tel:+48791481738" aria-label="Zamów bukiet: Bukiety premium, 300–400 zł – telefonicznie">
               <span class="card__media">
-                <img src="assets/img/bukiet-zefir.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Duży bukiet premium z pudrowych róż i eustomy w różowym papierze">
+                <img src="assets/img/bukiet-zefir.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Duży bukiet premium z pudrowych i różowych róż w różowym papierze">
                 <span class="card__tag card__tag--premium">Premium</span>
               </span>
               <span class="card__body">
                 <span class="card__title">Bukiety premium</span>
                 <span class="card__text">Duże kompozycje z kwiatów importowanych – na zaręczyny, jubileusz, dla kogoś wyjątkowego.</span>
-                <span class="card__price">300–400 zł</span>
+                <span class="card__price">300–400&nbsp;zł</span>
                 <span class="card__cta">Zamów bukiet <span aria-hidden="true">→</span></span>
               </span>
             </a>
           </li>
           <li class="card" data-reveal>
-            <a class="card__link" href="tel:+48791481738" aria-label="Bukiety sezonowe, od 100 zł – zamów telefonicznie">
+            <a class="card__link" href="tel:+48791481738" aria-label="Zamów bukiet: Bukiety sezonowe, od 100 zł – telefonicznie">
               <span class="card__media">
                 <img src="assets/img/hero-jesien.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Jesienny bukiet z pomarańczowych dalii i białych chryzantem w żółtym papierze">
                 <span class="card__tag">Sezon</span>
@@ -268,7 +281,7 @@
               <span class="card__body">
                 <span class="card__title">Bukiety sezonowe</span>
                 <span class="card__text">Jesienią dalie i chryzantemy, wiosną tulipany, w maju i czerwcu peonie. Z tego, co właśnie kwitnie.</span>
-                <span class="card__price">od 100 zł</span>
+                <span class="card__price"><small>od</small> 100&nbsp;zł</span>
                 <span class="card__cta">Zamów bukiet <span aria-hidden="true">→</span></span>
               </span>
             </a>
@@ -290,22 +303,22 @@
     <section class="section gallery" id="galeria" aria-labelledby="gallery-title">
       <div class="container">
         <header class="section__head">
-          <p class="eyebrow">Galeria</p>
+          <p class="eyebrow">Galeria · @warszawskakwiaciarnia</p>
           <h2 id="gallery-title">Nasze bukiety</h2>
           <p class="lead">Zdjęcia z naszego Instagrama – wszystkie bukiety wiązane u nas, na Bemowie.</p>
         </header>
 
         <ul class="gallery__grid" id="gallery-grid">
-          <li><a href="assets/img/galeria-01.webp" data-lightbox data-caption="Pastelowy bukiet z eustomy, róż i eukaliptusa"><img src="assets/img/galeria-01.webp" width="750" height="1000" loading="eager" decoding="async" alt="Pastelowy bukiet z eustomy, róż i eukaliptusa w białym papierze"></a></li>
-          <li><a href="assets/img/bukiet-deep-ocean.webp" data-lightbox data-caption="Bukiet Deep Ocean z niebieską hortensją"><img src="assets/img/bukiet-deep-ocean.webp" width="750" height="1000" loading="eager" decoding="async" alt="Bukiet z niebieską hortensją, białymi różami i eustomą w granatowym papierze"></a></li>
-          <li><a href="assets/img/box-roze.webp" data-lightbox data-caption="Flower box z różami i eustomą"><img src="assets/img/box-roze.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Flower box z różowych róż, fioletowej eustomy i gipsówki w białym pudełku z kokardą"></a></li>
+          <li><a href="assets/img/galeria-01.webp" data-lightbox data-caption="Pastelowy bukiet z chryzantem, róż i hortensji"><img src="assets/img/galeria-01.webp" width="750" height="1000" loading="eager" decoding="async" alt="Pastelowy bukiet z białych chryzantem, kremowych róż, brzoskwiniowych goździków i niebieskiej hortensji z eukaliptusem w błękitnym papierze"></a></li>
+          <li><a href="assets/img/bukiet-deep-ocean.webp" data-lightbox data-caption="Bukiet Deep Ocean z niebieską hortensją"><img src="assets/img/bukiet-deep-ocean.webp" width="750" height="1000" loading="eager" decoding="async" alt="Bukiet Deep Ocean z niebieską hortensją, białą eustomą i goździkami w granatowym papierze"></a></li>
+          <li><a href="assets/img/box-roze.webp" data-lightbox data-caption="Flower box z różami i eustomą"><img src="assets/img/box-roze.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Flower box z różowych róż, fioletowej eustomy i gipsówki w jasnoróżowym pudełku z kokardą"></a></li>
           <li><a href="assets/img/mono-gipsowka.webp" data-lightbox data-caption="Bukiet kolorowej gipsówki"><img src="assets/img/mono-gipsowka.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Chmura różowej i niebieskiej gipsówki w jasnoróżowym papierze"></a></li>
-          <li><a href="assets/img/galeria-04.webp" data-lightbox data-caption="Niebieska hortensja z białymi kwiatami"><img src="assets/img/galeria-04.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet z niebieską hortensją, białymi różami i zielenią w białym papierze"></a></li>
+          <li><a href="assets/img/galeria-04.webp" data-lightbox data-caption="Niebieska hortensja z białymi kwiatami"><img src="assets/img/galeria-04.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet z niebieską hortensją, białymi gerberami i eustomą w miętowym papierze"></a></li>
           <li><a href="assets/img/galeria-09.webp" data-lightbox data-caption="Bukiet z różowych róż i liliowych kwiatów"><img src="assets/img/galeria-09.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet z różowych róż, liliowych kwiatów i traw w pastelowym papierze"></a></li>
           <li><a href="assets/img/bukiet-harmony.webp" data-lightbox data-caption="Bukiet Harmony"><img src="assets/img/bukiet-harmony.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet Harmony z różowych róż, hortensji i eustomy w różowym papierze"></a></li>
           <li><a href="assets/img/galeria-07.webp" data-lightbox data-caption="Biała eustoma w liliowym papierze"><img src="assets/img/galeria-07.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet białej eustomy i fioletowych kwiatów w liliowym papierze"></a></li>
           <li><a href="assets/img/bukiet-cherry.webp" data-lightbox data-caption="Bukiet Cherry"><img src="assets/img/bukiet-cherry.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet Cherry z różowych i wiśniowych kwiatów w ciemnoróżowym papierze"></a></li>
-          <li><a href="assets/img/galeria-12.webp" data-lightbox data-caption="Różowa eustoma i róże"><img src="assets/img/galeria-12.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet różowej eustomy, róż i fioletowych kwiatów w różowym papierze"></a></li>
+          <li><a href="assets/img/galeria-12.webp" data-lightbox data-caption="Różowa eustoma, dalia i hortensja"><img src="assets/img/galeria-12.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet z fioletowej hortensji, różowej eustomy, dalii i gerbery w różowym papierze"></a></li>
           <li><a href="assets/img/hero-niebieska-hortensja.webp" data-lightbox data-caption="Niebieska hortensja z gipsówką"><img src="assets/img/hero-niebieska-hortensja.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet z niebieską hortensją i białą gipsówką w błękitnym papierze"></a></li>
           <li><a href="assets/img/galeria-16.webp" data-lightbox data-caption="Czerwone róże z sercem"><img src="assets/img/galeria-16.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Bukiet czerwonych róż w bordowym papierze z ozdobnym sercem"></a></li>
         </ul>
@@ -329,7 +342,7 @@
             <img src="assets/img/mono-roza-galazkowa.webp" width="750" height="1000" loading="lazy" decoding="async" alt="Duży bukiet kremowych róż gałązkowych z jasną wstążką">
           </div>
           <div class="feature__text">
-            <p class="eyebrow">Śluby i eventy</p>
+            <p class="eyebrow">Dla par</p>
             <h3 class="h2">Śluby i eventy</h3>
             <p>Bukiet ślubny, butonierki, dekoracja stołów, ścianka i łuk – przygotujemy całość w jednym stylu. Spotkajmy się w kwiaciarni albo wyślij inspiracje na Instagramie; wrócimy z propozycją i wyceną.</p>
             <ul class="feature__list">
@@ -340,7 +353,7 @@
             <p class="feature__price">Wycena indywidualna</p>
             <div class="feature__cta">
               <a class="btn btn--primary" href="tel:+48791481738" aria-label="Zapytaj o wycenę: zadzwoń 791 481 738"><svg aria-hidden="true"><use href="#i-phone"/></svg> Zapytaj o wycenę</a>
-              <a class="btn btn--secondary" href="https://www.instagram.com/warszawskakwiaciarnia/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-instagram"/></svg> Napisz na Instagramie<span class="sr-only"> (otwiera się w nowej karcie)</span></a>
+              <a class="btn btn--secondary" href="https://ig.me/m/warszawskakwiaciarnia" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-instagram"/></svg> Napisz na Instagramie<span class="sr-only"> (otwiera się w nowej karcie)</span></a>
             </div>
           </div>
         </article>
@@ -376,7 +389,7 @@
     <section class="section about" id="o-nas" aria-labelledby="about-title">
       <div class="container about__grid">
         <div class="about__media" data-reveal>
-          <img src="assets/img/o-nas.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Bukiet z fioletowej hortensji, róż i eustomy trzymany przed witryną kwiaciarni">
+          <img src="assets/img/o-nas.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Bukiet z fioletowej hortensji, dalii i eustomy trzymany przed witryną kwiaciarni">
         </div>
         <div class="about__text" data-reveal>
           <p class="eyebrow">O nas</p>
@@ -400,7 +413,7 @@
         <div class="reviews__grid">
           <div class="rating-card" data-reveal>
             <p class="rating-card__score">4,9</p>
-            <p class="rating-card__stars" aria-label="Ocena 4,9 na 5">
+            <p class="rating-card__stars" role="img" aria-label="Ocena 4,9 na 5">
               <svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg>
             </p>
             <p class="rating-card__sub">ponad 100 opinii w Google</p>
@@ -408,19 +421,19 @@
           </div>
           <ul class="reviews__list">
             <li class="review" data-reveal>
-              <p class="review__stars" aria-label="5 gwiazdek"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></p>
-              <blockquote><p>„Bukiet przepiękny. Kwiaty idealnie dopasowane do moich wytycznych, a w zasadzie przerosły moje oczekiwania. A do tego jeszcze taka przemiła obsługa.”</p></blockquote>
-              <p class="review__author">Olha · opinia z Google</p>
+              <p class="review__stars" role="img" aria-label="5 gwiazdek"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></p>
+              <blockquote><p>„Polecam. Bukiet przepiękny. Bo o to głównie chodzi we florystyce, kwiaty idealnie dopasowane były do moich wytycznych, a w zasadzie przerosły moje oczekiwania, bo był cudny! A do tego jeszcze taka przemiła obsługa.”</p></blockquote>
+              <p class="review__author">Olha · opinia klientki</p>
             </li>
             <li class="review" data-reveal>
-              <p class="review__stars" aria-label="5 gwiazdek"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></p>
-              <blockquote><p>„Super kwiaciarnia w okolicy! Piękne kwiaty cięte i doniczkowe. Przemiła obsługa. Ceny adekwatne do jakości, a towar widać, że świeżutki.”</p></blockquote>
-              <p class="review__author">Ołeksandra · opinia z Google</p>
+              <p class="review__stars" role="img" aria-label="5 gwiazdek"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></p>
+              <blockquote><p>„Super kwiaciarnia w okolicy! Piękne kwiaty cięte i doniczkowe. Przemiła obsługa. Serdecznie polecam to cudowne miejsce. Ceny adekwatne do jakości towaru, a towar widać, że świeżutki.”</p></blockquote>
+              <p class="review__author">Ołeksandra · opinia klientki</p>
             </li>
             <li class="review" data-reveal>
-              <p class="review__stars" aria-label="5 gwiazdek"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></p>
-              <blockquote><p>„Zdecydowanie moje ulubione miejsce na zakup kwiatów. Kwiaty były świeże, pięknie ułożone, a cały bukiet prezentował się wyjątkowo elegancko.”</p></blockquote>
-              <p class="review__author">Andrzej · opinia z Google</p>
+              <p class="review__stars" role="img" aria-label="5 gwiazdek"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></p>
+              <blockquote><p>„Warszawska kwiaciarnia to zdecydowanie moje ulubione miejsce na zakup kwiatów! […] Kwiaty były świeże, pięknie ułożone, a cały bukiet prezentował się wyjątkowo elegancko. Obsługa była również bardzo miła i pomocna.”</p></blockquote>
+              <p class="review__author">Andrzej · opinia klienta</p>
             </li>
           </ul>
         </div>
@@ -451,7 +464,7 @@
               <li><a href="https://www.tiktok.com/@warszawskakwiaciarnia" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-tiktok"/></svg> TikTok<span class="sr-only"> (otwiera się w nowej karcie)</span></a></li>
             </ul>
             <div class="visit__cta">
-              <a class="btn btn--primary" href="https://www.google.com/maps/search/?api=1&query=Warszawska+Kwiaciarnia+Powsta%C5%84c%C3%B3w+%C5%9Al%C4%85skich+24A+Warszawa" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg> Jak dojechać<span class="sr-only"> (otwiera się w nowej karcie)</span></a>
+              <a class="btn btn--primary" href="https://www.google.com/maps/dir/?api=1&destination=Powsta%C5%84c%C3%B3w+%C5%9Al%C4%85skich+24A%2C+01-381+Warszawa" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg> Jak dojechać<span class="sr-only"> (otwiera się w nowej karcie)</span></a>
               <a class="btn btn--secondary" href="tel:+48791481738" aria-label="Zadzwoń: 791 481 738"><svg aria-hidden="true"><use href="#i-phone"/></svg> Zadzwoń</a>
             </div>
           </div>
@@ -479,7 +492,7 @@
               <p class="map-card__title">Warszawska Kwiaciarnia</p>
               <p class="map-card__addr">Powstańców Śląskich 24A, Warszawa<br><span class="muted">naprzeciwko Hali Wola</span></p>
               <div class="map-card__cta">
-                <a class="btn btn--primary" href="https://www.google.com/maps/search/?api=1&query=Warszawska+Kwiaciarnia+Powsta%C5%84c%C3%B3w+%C5%9Al%C4%85skich+24A+Warszawa" target="_blank" rel="noopener">Jak dojechać<span class="sr-only"> (otwiera się w nowej karcie)</span></a>
+                <a class="btn btn--primary" href="https://www.google.com/maps/dir/?api=1&destination=Powsta%C5%84c%C3%B3w+%C5%9Al%C4%85skich+24A%2C+01-381+Warszawa" target="_blank" rel="noopener">Jak dojechać<span class="sr-only"> (otwiera się w nowej karcie)</span></a>
                 <button type="button" class="btn btn--secondary" data-map-load>Pokaż mapę</button>
               </div>
             </div>
@@ -508,9 +521,27 @@
           <p>Tak. Przyjdź, powiedz, na jaką okazję i jaki budżet, a bukiet zwiążemy przy tobie.</p>
         </details>
         <details class="faq__item">
+          <summary>Ile kosztuje bukiet? <svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
+          <p>Bukiety zaczynają się od ok. 100 zł, flower boxy to 120–140 zł, a bukiety premium 300–400 zł. Powiedz nam budżet i okazję, a dobierzemy kwiaty tak, żeby się zmieścić.</p>
+        </details>
+        <details class="faq__item">
           <summary>Czy można kupić online? <svg aria-hidden="true"><use href="#i-chevron"/></svg></summary>
           <p>Nie prowadzimy sklepu internetowego. Zamówienia przyjmujemy telefonicznie, na Instagramie i na miejscu.</p>
         </details>
+      </div>
+    </section>
+
+    <!-- ===================== PAS ZAMYKAJĄCY ===================== -->
+    <section class="cta-band" aria-labelledby="cta-title">
+      <div class="container cta-band__inner">
+        <div>
+          <h2 id="cta-title">Bukiet na dziś? Zadzwoń lub napisz.</h2>
+          <p>Powiedz, dla kogo i na jaką okazję – dobierzemy kwiaty i budżet. Odbiór w kwiaciarni naprzeciwko Hali Wola.</p>
+        </div>
+        <div class="cta-band__cta">
+          <a class="btn btn--primary btn--lg" href="tel:+48791481738" aria-label="Zadzwoń: 791 481 738"><svg aria-hidden="true"><use href="#i-phone"/></svg> Zadzwoń</a>
+          <a class="btn btn--secondary btn--lg" href="https://ig.me/m/warszawskakwiaciarnia" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-instagram"/></svg> Napisz na Instagramie<span class="sr-only"> (otwiera się w nowej karcie)</span></a>
+        </div>
       </div>
     </section>
   </main>
@@ -536,7 +567,7 @@
         <h2 class="site-footer__h">Godziny otwarcia</h2>
         <p>Pon–Pt 9:00–20:00<br>Sb 10:00–20:00<br>Nd 10:00–16:00</p>
         <p>ul. Powstańców Śląskich 24A, Warszawa (Bemowo)<br>
-          <a href="https://www.google.com/maps/search/?api=1&query=Warszawska+Kwiaciarnia+Powsta%C5%84c%C3%B3w+%C5%9Al%C4%85skich+24A+Warszawa" target="_blank" rel="noopener">Jak dojechać<span class="sr-only"> (otwiera się w nowej karcie)</span></a></p>
+          <a href="https://www.google.com/maps/dir/?api=1&destination=Powsta%C5%84c%C3%B3w+%C5%9Al%C4%85skich+24A%2C+01-381+Warszawa" target="_blank" rel="noopener">Jak dojechać<span class="sr-only"> (otwiera się w nowej karcie)</span></a></p>
       </div>
     </div>
     <div class="container site-footer__bottom">
@@ -548,8 +579,8 @@
   <!-- Dolny pasek na telefonie -->
   <nav class="bottom-bar" aria-label="Szybki kontakt">
     <a class="bottom-bar__btn bottom-bar__btn--primary" href="tel:+48791481738" aria-label="Zadzwoń: 791 481 738"><svg aria-hidden="true"><use href="#i-phone"/></svg><span>Zadzwoń</span></a>
-    <a class="bottom-bar__btn" href="https://www.instagram.com/warszawskakwiaciarnia/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-instagram"/></svg><span>Instagram</span></a>
-    <a class="bottom-bar__btn" href="https://www.google.com/maps/search/?api=1&query=Warszawska+Kwiaciarnia+Powsta%C5%84c%C3%B3w+%C5%9Al%C4%85skich+24A+Warszawa" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg><span>Dojazd</span></a>
+    <a class="bottom-bar__btn" href="https://www.instagram.com/warszawskakwiaciarnia/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-instagram"/></svg><span>Instagram<span class="sr-only"> (otwiera się w nowej karcie)</span></span></a>
+    <a class="bottom-bar__btn" href="https://www.google.com/maps/dir/?api=1&destination=Powsta%C5%84c%C3%B3w+%C5%9Al%C4%85skich+24A%2C+01-381+Warszawa" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg><span>Dojazd<span class="sr-only"> (otwiera się w nowej karcie)</span></span></a>
   </nav>
 
   <!-- Etykieta wersji (tylko z ?review=1) -->
@@ -561,7 +592,7 @@
     <button type="button" class="lightbox__btn lightbox__prev" data-lb="prev" aria-label="Poprzednie zdjęcie"><svg aria-hidden="true"><use href="#i-arrow-left"/></svg></button>
     <figure class="lightbox__figure">
       <img src="" alt="" width="750" height="1000">
-      <figcaption><span class="lightbox__caption"></span> <span class="lightbox__counter"></span></figcaption>
+      <figcaption aria-live="polite" aria-atomic="true"><span class="lightbox__caption"></span> <span class="lightbox__counter"></span></figcaption>
     </figure>
     <button type="button" class="lightbox__btn lightbox__next" data-lb="next" aria-label="Następne zdjęcie"><svg aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
   </dialog>

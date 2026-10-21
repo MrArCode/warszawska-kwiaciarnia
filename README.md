@@ -35,9 +35,9 @@ assets/js/main.js     przełącznik motywów, „otwarte teraz”, lightbox, map
 assets/img/           zdjęcia (WebP) ze starej strony i Instagrama kwiaciarni, logo, favicon, og.jpg
 ```
 
-Treść zmienia się bezpośrednio w `index.html`. Godziny otwarcia są w dwóch miejscach: w atrybucie `data-hours`
-na plakietce w nagłówku (format `{"1":[9,20], …, "0":[10,16]}`, 0 = niedziela) oraz w tabeli w sekcji „Odwiedź nas”
-i w stopce. Przy zmianie godzin trzeba poprawić wszystkie trzy.
+Treść zmienia się bezpośrednio w `index.html`. Godziny otwarcia powtarzają się w kilku miejscach i przy zmianie
+trzeba poprawić wszystkie: atrybut `data-hours` na plakietce w nagłówku (format `{"1":[9,20], …, "0":[10,16]}`,
+0 = niedziela), tabela w sekcji „Odwiedź nas”, linia w sekcji „O nas”, stopka oraz blok JSON-LD w `<head>`.
 
 ## Co jest w środku
 
@@ -57,6 +57,8 @@ Na telefonie stały dolny pasek: Zadzwoń · Instagram · Dojazd.
 8. Śluby: ile wyprzedzenia; czy robi dekoracje plenerowe. Firmy: co dokładnie i dla kogo.
 9. Domena kwiaciarniawarszawska.pl: kto ma dostęp do DNS i hostingu home.pl; czy przekierować na nową stronę.
 10. Który motyw (albo mieszanka) i co zmienić w tekstach.
+11. Kod pocztowy: stara strona podaje 01-381 – potwierdzić (w sieci pojawia się też 01-355).
+12. Czy odpisuje na wiadomości na Instagramie w godzinach otwarcia (przyciski „Napisz na Instagramie” otwierają od razu wiadomość).
 
 ## Przed wdrożeniem produkcyjnym
 

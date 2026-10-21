@@ -43,7 +43,9 @@
     });
     if (heroImg) {
       var src = heroImg.getAttribute('data-src-' + theme);
+      var alt = heroImg.getAttribute('data-alt-' + theme);
       if (src && heroImg.getAttribute('src') !== src) heroImg.setAttribute('src', src);
+      if (alt) heroImg.setAttribute('alt', alt);
     }
     if (reviewLabel && reviewMode) {
       reviewLabel.textContent = 'Wersja: ' + THEME_NAMES[theme] + ' · ' + (THEMES.indexOf(theme) + 1) + '/3';
@@ -93,7 +95,9 @@
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         navLinks.forEach(function (a) {
-          a.classList.toggle('is-active', a.getAttribute('href') === '#' + entry.target.id);
+          var active = a.getAttribute('href') === '#' + entry.target.id;
+          a.classList.toggle('is-active', active);
+          if (active) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
         });
       });
     }, { rootMargin: '-40% 0px -55% 0px' });
@@ -278,6 +282,7 @@
         mapBox.innerHTML = '';
         mapBox.appendChild(iframe);
         mapBox.classList.add('is-loaded');
+        iframe.focus();
       });
     }
   }
