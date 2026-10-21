@@ -16,22 +16,12 @@ Każdy wariant można też otworzyć bezpośrednio z linku:
 
 Dodatek `&review=1` pokazuje w rogu etykietę z nazwą aktualnej wersji (przydatne przy omawianiu).
 
-## Trzy poziomy animacji do porównania
+## Animacje
 
-Drugi przełącznik (kwiatki obok kółek z kolorami) albo parametr `?motion=` w adresie. Poziomy się sumują,
-a odcień różu i poziom animacji łączą się dowolnie, np. `…/?theme=pastel&motion=3`.
-
-| Poziom | Co się dzieje | Link |
-|---|---|---|
-| 1 Spokojny (domyślny) | powolne przybliżanie zdjęcia w hero, unoszenie kart po najechaniu, pulsująca kropka „otwarte”, animowane podkreślenia | `…/?motion=1` |
-| 2 Kwitnący | wejście z rysującym się lotosem, delikatne ornamenty roślinne w tle sekcji (koronkowe pasy kwiatów u góry sekcji, pionowa róża i tulipan w rogach) pojawiające się przy przewijaniu, sekcje wchodzą z rozmyciem, karty oferty jedna po drugiej | `…/?motion=2` |
-| 3 Pełnia | ornamenty we wszystkich sekcjach, pasy bardzo powoli dryfują, gałązki obok nazwy we wejściu, parallaksa zdjęcia hero i plam w tle, ocena nabija się licznikiem, okazje „rozkwitają” po najechaniu | `…/?motion=3` |
-
-Ornamenty w `assets/img/ornaments` to grafiki z domeny publicznej (Wikimedia Commons): secesyjne winiety z „Revue de photographie” (1900),
-„Rose ornament, 1905” i „Art Nouveau tulip ornament”. Są malowane kolorem wariantu przez maskę CSS, więc zmieniają barwę razem z odcieniem różu.
-
-Wejście z logo pokazuje się raz na sesję przeglądarki i po każdej zmianie poziomu; kliknięcie je pomija.
-Przy włączonym w systemie ograniczeniu ruchu strona zawsze działa na poziomie 1 bez wejścia.
+Strona ma jedno, spokojne ustawienie: przy pierwszym wejściu w sesji przeglądarki lotos rysuje się kreską
+i odsłania stronę (kliknięcie pomija; `?intro=1` w adresie pokazuje wejście jeszcze raz), zdjęcie w hero
+powoli się przybliża, karty unoszą się po najechaniu, karty oferty pojawiają się jedna po drugiej, a kropka
+„otwarte” pulsuje. Przy włączonym w systemie ograniczeniu ruchu wejście i animacje są wyłączone.
 
 ## Jak uruchomić lokalnie
 
@@ -49,8 +39,7 @@ i wejść na <http://localhost:8321>.
 index.html            cała treść strony (sekcje oznaczone komentarzami)
 assets/css/styles.css style; warianty koloru = trzy bloki zmiennych na górze pliku
 assets/js/main.js     przełącznik odcieni, „otwarte teraz”, lightbox, mapa po kliknięciu
-assets/js/motion.js   poziomy animacji: wejście z logo, ornamenty w tle, parallaksa, licznik
-assets/img/ornaments/ ornamenty roślinne (SVG, domena publiczna) używane na poziomach animacji 2 i 3
+assets/js/motion.js   wejście z logo i karty oferty wchodzące po kolei
 assets/img/           zdjęcia (WebP) ze starej strony i Instagrama kwiaciarni, logo, favicon, og.jpg
 ```
 
@@ -82,8 +71,7 @@ Na telefonie stały dolny pasek: Zadzwoń · Instagram · Dojazd.
 ## Przed wdrożeniem produkcyjnym
 
 - [ ] Usunąć `<meta name="robots" content="noindex">` z `index.html`.
-- [ ] Usunąć przełączniki prototypu (`.proto-controls` w HTML, blok 1 w `main.js`, część skryptu w `<head>`), zostawić jeden `data-theme` na `<html>` i jeden blok zmiennych w CSS.
-- [ ] Wybrać jeden poziom animacji: wpisać go na stałe w `data-motion` na `<html>`; przy poziomie 1 można usunąć `motion.js` i blok „wejście z logo” z HTML.
+- [ ] Usunąć przełącznik odcieni (`.proto-controls` w HTML, blok 1 w `main.js`, część skryptu w `<head>`), zostawić jeden `data-theme` na `<html>` i jeden blok zmiennych w CSS.
 - [ ] Ustawić absolutny adres w `og:image` (po ustaleniu domeny).
 - [ ] Wkleić aktualne opinie i liczby z Google.
 - [ ] Jeśli strona ma iść pod własną domenę: plik `CNAME` w repo i rekordy DNS u operatora domeny.

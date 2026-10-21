@@ -211,27 +211,23 @@ section { scroll-margin-top: 72px; }
 }
 .site-header__actions .icon-btn, .site-header__actions .btn--call { flex: none; }
 
-/* ---------- PRZEŁĄCZNIKI PROTOTYPU: odcień różu i poziom animacji ---------- */
+/* ---------- PRZEŁĄCZNIK ODCIENI RÓŻU (prototyp) ---------- */
 .proto-controls {
   position: fixed; right: 12px; bottom: calc(72px + env(safe-area-inset-bottom)); z-index: 40;
   display: flex; align-items: center; gap: 8px;
 }
-.theme-switch, .motion-switch {
+.theme-switch {
   display: flex; gap: 2px; padding: 3px; border-radius: 999px;
   background: var(--surface); border: 1px solid var(--border); box-shadow: 0 4px 16px rgba(0, 0, 0, .18);
 }
-.theme-switch__btn, .motion-switch__btn {
+.theme-switch__btn {
   width: 44px; height: 44px; border-radius: 50%; padding: 7px; cursor: pointer;
   border: 2px solid transparent; background-color: transparent; background-clip: content-box;
 }
-.theme-switch__btn[aria-checked="true"], .motion-switch__btn[aria-checked="true"] { border-color: var(--text); }
+.theme-switch__btn[aria-checked="true"] { border-color: var(--text); }
 .theme-switch__btn--pastel { background-image: linear-gradient(135deg, #FFF8F6 50%, #B8456A 50%); }
 .theme-switch__btn--raspberry { background-image: linear-gradient(135deg, #FFF5F9 50%, #C8286B 50%); }
 .theme-switch__btn--dusty { background-image: linear-gradient(135deg, #FBF3F0 50%, #A8515F 50%); }
-.motion-switch__btn { display: grid; place-items: center; color: var(--primary); }
-.motion-switch__btn svg { width: 22px; height: 22px; }
-.motion-switch__btn svg * { fill: currentColor; }
-.motion-switch__btn:disabled { opacity: .4; cursor: not-allowed; }
 @media (min-width: 900px) { .proto-controls { right: 16px; bottom: 16px; } }
 
 /* ---------- HERO ---------- */
@@ -597,25 +593,16 @@ body.has-dialog .bottom-bar, body.has-dialog .proto-controls { display: none; }
   .hours-badge { display: none; }
 }
 
-/* ---------- POZIOMY ANIMACJI (prototyp) ----------
-   data-motion na <html>: 1 spokojny · 2 kwitnący · 3 pełnia. Poziomy się sumują.
-   Przy ograniczonym ruchu skrypt w <head> wymusza poziom 1, a blok na końcu pliku wyłącza resztę. */
+/* ---------- DROBNE ANIMACJE ----------
+   Przy ograniczonym ruchu w systemie blok na końcu pliku wyłącza wszystkie. */
 @keyframes heroZoom { from { transform: scale(1.08); } to { transform: scale(1); } }
 @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(46, 158, 91, .5); } 60% { box-shadow: 0 0 0 7px rgba(46, 158, 91, 0); } }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes introOut { to { opacity: 0; visibility: hidden; } }
 @keyframes lotusGlow { from { transform: scale(.92); } to { transform: scale(1); } }
-@keyframes sway {
-  from { transform: rotate(-1.2deg) translateY(0); }
-  to   { transform: rotate(1.2deg) translateY(-5px); }
-}
-@keyframes drift {
-  from { transform: translateX(-14px); }
-  to   { transform: translateX(14px); }
-}
 
-/* poziom 1 – lekkie */
+/* lekkie: przybliżanie zdjęcia w hero, unoszenie kart, pulsująca kropka, podkreślenia */
 .hero__img { animation: heroZoom 14s ease-out both; }
 .card, .gallery__grid a { transition: transform .25s ease, box-shadow .25s ease; }
 .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(59, 42, 51, .12); }
@@ -625,61 +612,12 @@ body.has-dialog .bottom-bar, body.has-dialog .proto-controls { display: none; }
 .link-arrow { background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 1px; transition: background-size .3s ease; padding-bottom: 1px; }
 .link-arrow:hover { background-size: 100% 1px; text-decoration: none; }
 
-/* poziomy 2 i 3 – wejścia z rozmyciem */
-html.js:is([data-motion="2"], [data-motion="3"]) [data-reveal] {
-  filter: blur(8px); transform: translateY(16px);
-  transition: opacity .7s ease, transform .7s ease, filter .7s ease;
-}
-html.js:is([data-motion="2"], [data-motion="3"]) [data-reveal].is-visible { filter: none; transform: none; }
-html.js:is([data-motion="2"], [data-motion="3"]) .card[data-reveal].is-visible {
-  transition: transform .25s ease, box-shadow .25s ease, opacity .7s ease, filter .7s ease;
-}
-
-/* poziomy 2 i 3 – ornamenty roślinne w tle (wstawia je motion.js; grafiki w assets/img/ornaments, domena publiczna)
-   Ornament to maska CSS wypełniona kolorem wariantu, więc zmienia kolor razem z odcieniem różu. */
-.section, .hero, .cta-band, .site-footer { position: relative; isolation: isolate; }
-.orn {
-  position: absolute; z-index: -1; pointer-events: none; opacity: 0;
-  transition: opacity 1.4s ease, transform 1.4s ease;
-}
-.orn.is-visible { opacity: var(--op, .22); transform: none; }
-.orn__img {
-  display: block; width: 100%; height: 100%; background: var(--primary);
-  -webkit-mask: var(--img) center / contain no-repeat; mask: var(--img) center / contain no-repeat;
-}
-.cta-band .orn__img { background: var(--primary-text); }
-/* pas u góry sekcji, wygaszony na brzegach */
-.orn--band {
-  top: 10px; left: 50%; width: min(1180px, 96vw); height: clamp(44px, 9vw, 118px);
-  transform: translate(-50%, 10px);
-  -webkit-mask: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
-  mask: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
-}
-.orn--band.is-visible { transform: translate(-50%, 0); }
-.orn--band.orn--bottom { top: auto; bottom: 10px; }
-/* ozdoba narożna (pionowa) */
-.orn--corner { width: var(--w, 70px); height: var(--h, 300px); transform: translateY(10px); }
-.orn--bl { bottom: 16px; left: 10px; }
-.orn--br { bottom: 16px; right: 10px; }
-.orn--tr { top: 16px; right: 10px; }
-.orn--tl { top: 16px; left: 10px; }
-html[data-motion="1"] .orn { display: none; }
-html:not([data-motion="3"]) .orn[data-level="3"] { display: none; }
-/* poziom 3: pasy bardzo powoli dryfują, ozdoby narożne lekko się kołyszą */
-html[data-motion="3"] .orn--band .orn__img { animation: drift 26s ease-in-out infinite alternate; }
-html[data-motion="3"] .orn--corner.is-visible { animation: sway 14s ease-in-out infinite alternate; }
-@media (max-width: 899px) {
-  .orn--hero { display: none !important; }
-  .orn--corner { width: calc(var(--w, 70px) * .7); height: calc(var(--h, 300px) * .7); }
-}
-
-/* poziomy 2 i 3 – wejście z logo */
+/* wejście z logo (raz na sesję przeglądarki) */
 .intro {
   display: none; position: fixed; inset: 0; z-index: 200; background: var(--bg); color: var(--primary);
   pointer-events: none; align-items: center; justify-content: center; flex-direction: column; gap: 18px;
 }
 html.intro-pending .intro { display: flex; animation: introOut .6s ease 2s forwards; }
-html[data-motion="3"].intro-pending .intro { animation-delay: 2.6s; }
 .intro.is-done { display: none !important; }
 .intro__lotus { width: 120px; height: 120px; overflow: visible; animation: lotusGlow 1.4s ease-out both; }
 .intro__lotus path, .intro__lotus circle {
@@ -692,38 +630,16 @@ html[data-motion="3"].intro-pending .intro { animation-delay: 2.6s; }
 .intro__lotus :nth-child(6) { animation-delay: .75s; }
 .intro__lotus :nth-child(7) { animation-delay: .9s; }
 .intro__name { margin: 0; font-family: var(--font-display); font-size: 1.6rem; color: var(--text); opacity: 0; animation: fadeUp .7s ease .8s forwards; }
-.intro__sprig {
-  display: none; position: absolute; top: calc(50% + 44px); width: 96px; height: 29px; color: var(--primary); opacity: .85;
-  fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
-}
-.intro__sprig--l { left: calc(50% - 212px); }
-.intro__sprig--r { left: calc(50% + 116px); transform: scaleX(-1); }
-.intro__sprig path { stroke-dasharray: 100; stroke-dashoffset: 100; }
-html[data-motion="3"].intro-pending .intro__sprig { display: block; }
-html[data-motion="3"].intro-pending .intro__sprig path { animation: draw 1.2s ease-out 1.15s forwards; }
-html[data-motion="3"].intro-pending .intro__sprig path:nth-child(2) { animation-delay: 1.5s; }
-html[data-motion="3"].intro-pending .intro__sprig path:nth-child(3) { animation-delay: 1.7s; }
-html[data-motion="3"].intro-pending .intro__sprig path:nth-child(4) { animation-delay: 1.6s; }
-html[data-motion="3"].intro-pending .intro__sprig path:nth-child(5) { animation-delay: 1.9s; }
-@media (max-width: 599px) { .intro__sprig { display: none !important; } }
-
-/* poziom 3 – pełnia */
-html[data-motion="3"] .hero__media { will-change: transform; }
-html[data-motion="3"] .offer::before, html[data-motion="3"] .offer::after { transform: translateY(var(--blob-y, 0px)); }
-html[data-motion="3"] .occasions .flower { display: inline-block; transition: transform .5s ease; }
-html[data-motion="3"] .occasion:hover + .flower, html[data-motion="3"] .flower:hover { transform: rotate(180deg) scale(1.5); }
-
 /* ---------- RUCH OGRANICZONY, DRUK ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
   .js [data-reveal] { opacity: 1; transform: none; filter: none; }
   .card__link:hover .card__media img, .gallery__grid a:hover img { transform: none; }
-  .intro, .orn { display: none !important; }
+  .intro { display: none !important; }
 }
 @media print {
-  .site-header__actions, .bottom-bar, .proto-controls, .review-label, .skip-link, .gallery__more, .offer__hint,
-  .intro, .orn { display: none !important; }
+  .site-header__actions, .bottom-bar, .proto-controls, .review-label, .skip-link, .gallery__more, .offer__hint, .intro { display: none !important; }
   .site-footer { padding-bottom: 24px; }
   .js [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
 }

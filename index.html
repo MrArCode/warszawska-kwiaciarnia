@@ -31,18 +31,11 @@
       var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = HERO[theme]; l.setAttribute('fetchpriority', 'high');
       document.head.appendChild(l);
 
-      // Poziom animacji: ?motion= w adresie → zapamiętany wybór → 1. Przy ograniczonym ruchu zawsze 1.
-      var M = ['1', '2', '3'];
-      var mu = new URLSearchParams(location.search).get('motion');
-      var ms = null; try { ms = localStorage.getItem('wk-motion'); } catch (e) {}
-      var motion = M.indexOf(mu) > -1 ? mu : (M.indexOf(ms) > -1 ? ms : '1');
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        motion = '1'; document.documentElement.setAttribute('data-motion-forced', '');
-      }
-      document.documentElement.setAttribute('data-motion', motion);
-      // wejście z logo raz na sesję przeglądarki (i po każdej zmianie poziomu)
+      // Wejście z logo: raz na sesję przeglądarki (?intro=1 wymusza), nigdy przy ograniczonym ruchu w systemie.
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var seen = null; try { seen = sessionStorage.getItem('wk-intro'); } catch (e) {}
-      if (motion !== '1' && seen !== motion) document.documentElement.classList.add('intro-pending');
+      var again = new URLSearchParams(location.search).get('intro') === '1';
+      if (!reduce && (!seen || again)) document.documentElement.classList.add('intro-pending');
     })();
   </script>
 
@@ -97,7 +90,7 @@
 <body>
   <a class="skip-link" href="#main">Przejdź do treści</a>
 
-  <!-- WEJŚCIE Z LOGO – pokazuje się przy poziomach animacji 2 i 3 (prototyp). Lotos narysowany jako SVG na wzór logo. -->
+  <!-- WEJŚCIE Z LOGO – raz na sesję przeglądarki. Lotos narysowany jako SVG na wzór logo. -->
   <div class="intro" id="intro" aria-hidden="true">
     <svg class="intro__lotus" viewBox="0 0 120 120" aria-hidden="true">
       <path pathLength="100" d="M60 18 C 48 40 48 72 60 96 C 72 72 72 40 60 18 Z"/>
@@ -109,21 +102,6 @@
       <circle pathLength="100" cx="60" cy="112" r="2.2"/>
     </svg>
     <p class="intro__name">Warszawska Kwiaciarnia</p>
-    <!-- gałązki po bokach nazwy, tylko na poziomie 3 -->
-    <svg class="intro__sprig intro__sprig--l" viewBox="0 0 120 36" aria-hidden="true">
-      <path pathLength="100" d="M4 31 C 32 30, 64 24, 116 5"/>
-      <path pathLength="100" d="M28 29 C 32 20, 41 16, 52 17 C 46 24, 38 28, 28 29 Z"/>
-      <path pathLength="100" d="M60 22 C 63 13, 72 9, 82 10 C 77 17, 69 21, 60 22 Z"/>
-      <path pathLength="100" d="M44 27 C 50 29, 55 32, 58 34 C 52 35, 46 33, 44 27 Z"/>
-      <path pathLength="100" d="M86 14 C 90 7, 98 4, 108 5 C 103 12, 95 15, 86 14 Z"/>
-    </svg>
-    <svg class="intro__sprig intro__sprig--r" viewBox="0 0 120 36" aria-hidden="true">
-      <path pathLength="100" d="M4 31 C 32 30, 64 24, 116 5"/>
-      <path pathLength="100" d="M28 29 C 32 20, 41 16, 52 17 C 46 24, 38 28, 28 29 Z"/>
-      <path pathLength="100" d="M60 22 C 63 13, 72 9, 82 10 C 77 17, 69 21, 60 22 Z"/>
-      <path pathLength="100" d="M44 27 C 50 29, 55 32, 58 34 C 52 35, 46 33, 44 27 Z"/>
-      <path pathLength="100" d="M86 14 C 90 7, 98 4, 108 5 C 103 12, 95 15, 86 14 Z"/>
-    </svg>
   </div>
 
   <!-- Ikony (sprite SVG). Używane przez <use href="#i-nazwa">. -->
@@ -175,7 +153,7 @@
           <span class="btn--call__num">791 481 738</span>
         </a>
 
-        <!-- Przełączniki prototypu (odcień różu, poziom animacji) są na końcu strony, w bloku .proto-controls -->
+        <!-- Przełącznik odcieni różu (prototyp) jest na końcu strony, w bloku .proto-controls -->
 
       </div>
     </div>
@@ -620,19 +598,8 @@
     <a class="bottom-bar__btn" href="https://www.google.com/maps/dir/?api=1&destination=Powsta%C5%84c%C3%B3w+%C5%9Al%C4%85skich+24A%2C+01-381+Warszawa" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pin"/></svg><span>Dojazd<span class="sr-only"> (otwiera się w nowej karcie)</span></span></a>
   </nav>
 
-  <!-- PRZEŁĄCZNIKI PROTOTYPU – tylko na czas porównywania wersji. Przed wdrożeniem usunąć cały blok. -->
+  <!-- PRZEŁĄCZNIK ODCIENI – tylko na czas porównywania wersji. Przed wdrożeniem usunąć cały blok. -->
   <div class="proto-controls">
-    <div class="motion-switch" role="radiogroup" aria-label="Poziom animacji">
-      <button type="button" role="radio" aria-checked="true" data-set-motion="1" class="motion-switch__btn" title="Spokojny – lekkie animacje">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/></svg><span class="sr-only">Spokojny</span>
-      </button>
-      <button type="button" role="radio" aria-checked="false" data-set-motion="2" class="motion-switch__btn" title="Kwitnący – wejście z logo i roślinki w tle">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="5.5" rx="2.6" ry="4"/><ellipse cx="12" cy="18.5" rx="2.6" ry="4"/></svg><span class="sr-only">Kwitnący</span>
-      </button>
-      <button type="button" role="radio" aria-checked="false" data-set-motion="3" class="motion-switch__btn" title="Pełnia – wszystkie efekty">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="5.5" rx="2.6" ry="4"/><ellipse cx="12" cy="18.5" rx="2.6" ry="4"/><ellipse cx="5.5" cy="12" rx="4" ry="2.6"/><ellipse cx="18.5" cy="12" rx="4" ry="2.6"/></svg><span class="sr-only">Pełnia</span>
-      </button>
-    </div>
     <div class="theme-switch" role="radiogroup" aria-label="Porównaj odcienie różu">
       <button type="button" role="radio" aria-checked="true" data-set-theme="pastel" class="theme-switch__btn theme-switch__btn--pastel" title="Pudrowy róż"><span class="sr-only">Pudrowy róż</span></button>
       <button type="button" role="radio" aria-checked="false" data-set-theme="raspberry" class="theme-switch__btn theme-switch__btn--raspberry" title="Malinowy"><span class="sr-only">Malinowy</span></button>
