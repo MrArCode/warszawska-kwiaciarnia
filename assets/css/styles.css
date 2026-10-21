@@ -595,15 +595,13 @@ body.has-dialog .bottom-bar, body.has-dialog .proto-controls { display: none; }
 
 /* ---------- DROBNE ANIMACJE ----------
    Przy ograniczonym ruchu w systemie blok na końcu pliku wyłącza wszystkie. */
-@keyframes heroZoom { from { transform: scale(1.08); } to { transform: scale(1); } }
 @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(46, 158, 91, .5); } 60% { box-shadow: 0 0 0 7px rgba(46, 158, 91, 0); } }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes introOut { to { opacity: 0; visibility: hidden; } }
 @keyframes lotusGlow { from { transform: scale(.92); } to { transform: scale(1); } }
 
-/* lekkie: przybliżanie zdjęcia w hero, unoszenie kart, pulsująca kropka, podkreślenia */
-.hero__img { animation: heroZoom 14s ease-out both; }
+/* lekkie: unoszenie kart, pulsująca kropka, podkreślenia (zdjęcie w hero bez animacji) */
 .card, .gallery__grid a { transition: transform .25s ease, box-shadow .25s ease; }
 .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(59, 42, 51, .12); }
 .js .card[data-reveal].is-visible { transition: transform .25s ease, box-shadow .25s ease, opacity .55s ease; }

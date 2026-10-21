@@ -3,7 +3,7 @@
       kliknięcie lub klawisz je pomija, ?intro=0 w adresie je wyłącza.
       Przy włączonym w systemie ograniczeniu ruchu wejście się nie pokazuje (decyduje skrypt w <head>).
    2. Karty oferty pojawiają się jedna po drugiej.
-   Reszta drobnych animacji (przybliżanie zdjęcia w hero, unoszenie kart, pulsująca kropka) jest w CSS. */
+   Reszta drobnych animacji (unoszenie kart, pulsująca kropka) jest w CSS. */
 (function () {
   'use strict';
 

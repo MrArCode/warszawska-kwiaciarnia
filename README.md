@@ -19,8 +19,7 @@ Dodatek `&review=1` pokazuje w rogu etykietę z nazwą aktualnej wersji (przydat
 ## Animacje
 
 Strona ma jedno, spokojne ustawienie: przy każdym otwarciu strony lotos rysuje się kreską
-i odsłania stronę (kliknięcie pomija; `?intro=0` w adresie wyłącza wejście), zdjęcie w hero
-powoli się przybliża, karty unoszą się po najechaniu, karty oferty pojawiają się jedna po drugiej, a kropka
+i odsłania stronę (kliknięcie pomija; `?intro=0` w adresie wyłącza wejście), karty unoszą się po najechaniu, karty oferty pojawiają się jedna po drugiej, a kropka
 „otwarte” pulsuje. Przy włączonym w systemie ograniczeniu ruchu wejście i animacje są wyłączone.
 
 ## Jak uruchomić lokalnie
