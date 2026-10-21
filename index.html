@@ -109,14 +109,21 @@
       <circle pathLength="100" cx="60" cy="112" r="2.2"/>
     </svg>
     <p class="intro__name">Warszawska Kwiaciarnia</p>
-    <span class="intro__petal" style="--a: 0deg"></span>
-    <span class="intro__petal" style="--a: 45deg"></span>
-    <span class="intro__petal" style="--a: 90deg"></span>
-    <span class="intro__petal" style="--a: 135deg"></span>
-    <span class="intro__petal" style="--a: 180deg"></span>
-    <span class="intro__petal" style="--a: 225deg"></span>
-    <span class="intro__petal" style="--a: 270deg"></span>
-    <span class="intro__petal" style="--a: 315deg"></span>
+    <!-- gałązki po bokach nazwy, tylko na poziomie 3 -->
+    <svg class="intro__sprig intro__sprig--l" viewBox="0 0 120 36" aria-hidden="true">
+      <path pathLength="100" d="M4 31 C 32 30, 64 24, 116 5"/>
+      <path pathLength="100" d="M28 29 C 32 20, 41 16, 52 17 C 46 24, 38 28, 28 29 Z"/>
+      <path pathLength="100" d="M60 22 C 63 13, 72 9, 82 10 C 77 17, 69 21, 60 22 Z"/>
+      <path pathLength="100" d="M44 27 C 50 29, 55 32, 58 34 C 52 35, 46 33, 44 27 Z"/>
+      <path pathLength="100" d="M86 14 C 90 7, 98 4, 108 5 C 103 12, 95 15, 86 14 Z"/>
+    </svg>
+    <svg class="intro__sprig intro__sprig--r" viewBox="0 0 120 36" aria-hidden="true">
+      <path pathLength="100" d="M4 31 C 32 30, 64 24, 116 5"/>
+      <path pathLength="100" d="M28 29 C 32 20, 41 16, 52 17 C 46 24, 38 28, 28 29 Z"/>
+      <path pathLength="100" d="M60 22 C 63 13, 72 9, 82 10 C 77 17, 69 21, 60 22 Z"/>
+      <path pathLength="100" d="M44 27 C 50 29, 55 32, 58 34 C 52 35, 46 33, 44 27 Z"/>
+      <path pathLength="100" d="M86 14 C 90 7, 98 4, 108 5 C 103 12, 95 15, 86 14 Z"/>
+    </svg>
   </div>
 
   <!-- Ikony (sprite SVG). Używane przez <use href="#i-nazwa">. -->
@@ -619,7 +626,7 @@
       <button type="button" role="radio" aria-checked="true" data-set-motion="1" class="motion-switch__btn" title="Spokojny – lekkie animacje">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/></svg><span class="sr-only">Spokojny</span>
       </button>
-      <button type="button" role="radio" aria-checked="false" data-set-motion="2" class="motion-switch__btn" title="Kwitnący – wejście z logo i płatki">
+      <button type="button" role="radio" aria-checked="false" data-set-motion="2" class="motion-switch__btn" title="Kwitnący – wejście z logo i roślinki w tle">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="5.5" rx="2.6" ry="4"/><ellipse cx="12" cy="18.5" rx="2.6" ry="4"/></svg><span class="sr-only">Kwitnący</span>
       </button>
       <button type="button" role="radio" aria-checked="false" data-set-motion="3" class="motion-switch__btn" title="Pełnia – wszystkie efekty">

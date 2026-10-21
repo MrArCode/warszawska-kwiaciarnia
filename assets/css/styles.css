@@ -606,17 +606,9 @@ body.has-dialog .bottom-bar, body.has-dialog .proto-controls { display: none; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes introOut { to { opacity: 0; visibility: hidden; } }
 @keyframes lotusGlow { from { transform: scale(.92); } to { transform: scale(1); } }
-@keyframes petalFall {
-  0%   { transform: translate3d(0, -12vh, 0) rotate(0deg); }
-  25%  { transform: translate3d(var(--sway), 22vh, 0) rotate(70deg); }
-  50%  { transform: translate3d(calc(var(--sway) * -.6), 50vh, 0) rotate(160deg); }
-  75%  { transform: translate3d(var(--sway), 78vh, 0) rotate(250deg); }
-  100% { transform: translate3d(0, 108vh, 0) rotate(340deg); }
-}
-@keyframes bloom {
-  0%   { opacity: 0; transform: rotate(var(--a)) translateY(-6px) scale(.3); }
-  35%  { opacity: 1; }
-  100% { opacity: 0; transform: rotate(var(--a)) translateY(-130px) scale(1.15); }
+@keyframes sway {
+  from { transform: rotate(calc(var(--rot, 0deg) - 2deg)) translateY(0); }
+  to   { transform: rotate(calc(var(--rot, 0deg) + 2deg)) translateY(-8px); }
 }
 
 /* poziom 1 – lekkie */
@@ -639,12 +631,33 @@ html.js:is([data-motion="2"], [data-motion="3"]) .card[data-reveal].is-visible {
   transition: transform .25s ease, box-shadow .25s ease, opacity .7s ease, filter .7s ease;
 }
 
-/* poziom 2 – płatki w hero */
-.hero__petals { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.petal {
-  position: absolute; top: 0; left: var(--x); width: var(--s); height: calc(var(--s) * 1.7);
-  background: var(--accent); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; opacity: .85;
-  animation: petalFall var(--d) linear var(--delay) infinite; will-change: transform;
+/* poziomy 2 i 3 – konturowe roślinki w tle (wstawia je motion.js) */
+.section, .hero, .cta-band, .site-footer { position: relative; isolation: isolate; }
+.deco {
+  position: absolute; z-index: -1; width: var(--size, 160px); height: auto; overflow: visible; pointer-events: none;
+  color: var(--primary); opacity: var(--op, .18); transform: rotate(var(--rot, 0deg));
+  fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+}
+.deco--tl { top: 20px; left: 20px; }
+.deco--tr { top: 20px; right: 20px; }
+.deco--bl { bottom: 20px; left: 20px; }
+.deco--br { bottom: 20px; right: 20px; }
+.deco path { stroke-dasharray: 100; stroke-dashoffset: 100; }
+.deco.is-visible path { animation: draw 1.8s ease-out forwards; }
+.deco.is-visible path:nth-child(2) { animation-delay: .25s; }
+.deco.is-visible path:nth-child(3) { animation-delay: .5s; }
+.deco.is-visible path:nth-child(4) { animation-delay: .75s; }
+.deco.is-visible path:nth-child(5) { animation-delay: 1s; }
+.deco.is-visible path:nth-child(6) { animation-delay: 1.25s; }
+.deco.is-visible path:nth-child(7) { animation-delay: 1.5s; }
+html[data-motion="1"] .deco { display: none; }
+html:not([data-motion="3"]) .deco[data-level="3"] { display: none; }
+html[data-motion="3"] .deco { width: calc(var(--size, 160px) * 1.15); animation: sway 12s ease-in-out infinite alternate; }
+.cta-band .deco { color: var(--primary-text); }
+@media (max-width: 899px) {
+  .deco--hero { display: none !important; }
+  .deco { width: calc(var(--size, 160px) * .6); }
+  html[data-motion="3"] .deco { width: calc(var(--size, 160px) * .7); }
 }
 
 /* poziomy 2 i 3 – wejście z logo */
@@ -666,14 +679,22 @@ html[data-motion="3"].intro-pending .intro { animation-delay: 2.6s; }
 .intro__lotus :nth-child(6) { animation-delay: .75s; }
 .intro__lotus :nth-child(7) { animation-delay: .9s; }
 .intro__name { margin: 0; font-family: var(--font-display); font-size: 1.6rem; color: var(--text); opacity: 0; animation: fadeUp .7s ease .8s forwards; }
-.intro__petal {
-  position: absolute; left: 50%; top: 50%; width: 14px; height: 26px; margin: -34px 0 0 -7px;
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--accent); opacity: 0; transform-origin: 50% 100%;
+.intro__sprig {
+  display: none; position: absolute; top: calc(50% + 44px); width: 96px; height: 29px; color: var(--primary); opacity: .85;
+  fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
 }
-html[data-motion="3"].intro-pending .intro__petal { animation: bloom 1.1s ease-out 1.25s forwards; }
+.intro__sprig--l { left: calc(50% - 212px); }
+.intro__sprig--r { left: calc(50% + 116px); transform: scaleX(-1); }
+.intro__sprig path { stroke-dasharray: 100; stroke-dashoffset: 100; }
+html[data-motion="3"].intro-pending .intro__sprig { display: block; }
+html[data-motion="3"].intro-pending .intro__sprig path { animation: draw 1.2s ease-out 1.15s forwards; }
+html[data-motion="3"].intro-pending .intro__sprig path:nth-child(2) { animation-delay: 1.5s; }
+html[data-motion="3"].intro-pending .intro__sprig path:nth-child(3) { animation-delay: 1.7s; }
+html[data-motion="3"].intro-pending .intro__sprig path:nth-child(4) { animation-delay: 1.6s; }
+html[data-motion="3"].intro-pending .intro__sprig path:nth-child(5) { animation-delay: 1.9s; }
+@media (max-width: 599px) { .intro__sprig { display: none !important; } }
 
 /* poziom 3 – pełnia */
-.petals-canvas { position: fixed; inset: 0; z-index: 30; pointer-events: none; }
 html[data-motion="3"] .hero__media { will-change: transform; }
 html[data-motion="3"] .offer::before, html[data-motion="3"] .offer::after { transform: translateY(var(--blob-y, 0px)); }
 .sprig-wrap { display: none; height: 0; justify-content: center; transform: translateY(calc(clamp(56px, 8vw, 104px) / -2)); }
@@ -694,11 +715,11 @@ html[data-motion="3"] .occasion:hover + .flower, html[data-motion="3"] .flower:h
   *, *::before, *::after { transition: none !important; animation: none !important; }
   .js [data-reveal] { opacity: 1; transform: none; filter: none; }
   .card__link:hover .card__media img, .gallery__grid a:hover img { transform: none; }
-  .intro, .petals-canvas, .hero__petals, .sprig-wrap { display: none !important; }
+  .intro, .deco, .sprig-wrap { display: none !important; }
 }
 @media print {
   .site-header__actions, .bottom-bar, .proto-controls, .review-label, .skip-link, .gallery__more, .offer__hint,
-  .intro, .petals-canvas, .hero__petals, .sprig-wrap { display: none !important; }
+  .intro, .deco, .sprig-wrap { display: none !important; }
   .site-footer { padding-bottom: 24px; }
   .js [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
 }

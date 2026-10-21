@@ -1,7 +1,8 @@
 /* Warszawska Kwiaciarnia – poziomy animacji (prototyp).
-   data-motion na <html>: 1 = spokojny (lekkie animacje), 2 = kwitnący (wejście z logo, płatki w hero,
-   wejścia z rozmyciem, karty oferty jedna po drugiej), 3 = pełnia (płatki na całej stronie, parallaksa,
-   licznik oceny, gałązki między sekcjami, rozkwitające okazje). Poziomy się sumują.
+   data-motion na <html>: 1 = spokojny (lekkie animacje), 2 = kwitnący (wejście z logo, konturowe roślinki
+   w tle rysujące się przy przewijaniu, wejścia z rozmyciem, karty oferty jedna po drugiej), 3 = pełnia
+   (więcej i większe roślinki, które lekko się kołyszą, parallaksa, licznik oceny, gałązki między sekcjami,
+   rozkwitające okazje). Poziomy się sumują.
    Przy prefers-reduced-motion skrypt w <head> wymusza poziom 1 i nic z tego pliku nie animuje.
    Przed wdrożeniem: zostawić jeden poziom (atrybut data-motion w HTML) i usunąć przełącznik. */
 (function () {
@@ -44,27 +45,108 @@
     }, 200);
   }
 
-  /* ---------- 2. Płatki w hero (poziom 2) ---------- */
-  function heroPetals(on) {
-    var media = doc.querySelector('.hero__media');
-    if (!media) return;
-    var box = media.querySelector('.hero__petals');
-    if (!on) { if (box) box.parentNode.removeChild(box); return; }
-    if (box) return;
-    box = doc.createElement('div');
-    box.className = 'hero__petals';
-    box.setAttribute('aria-hidden', 'true');
-    for (var i = 0; i < 8; i++) {
-      var p = doc.createElement('span');
-      p.className = 'petal';
-      p.style.setProperty('--x', (4 + Math.random() * 92) + '%');
-      p.style.setProperty('--s', (8 + Math.random() * 8) + 'px');
-      p.style.setProperty('--d', (9 + Math.random() * 7) + 's');
-      p.style.setProperty('--delay', (-Math.random() * 14) + 's');
-      p.style.setProperty('--sway', (18 + Math.random() * 40) + 'px');
-      box.appendChild(p);
+  /* ---------- 2. Konturowe roślinki w tle (poziomy 2 i 3) ----------
+     Rysunki kreską, bardzo jasne, za treścią. Rysują się przy pierwszym pojawieniu w oknie.
+     Wpisy z lvl '3' pokazują się tylko na poziomie 3 (sterowane w CSS). */
+  var MOTIFS = {
+    lotus: { vb: '0 0 120 120', d: [
+      'M60 18 C 48 40 48 72 60 96 C 72 72 72 40 60 18 Z',
+      'M60 96 C 44 86 34 68 36 42 C 50 52 58 72 60 96 Z',
+      'M60 96 C 76 86 86 68 84 42 C 70 52 62 72 60 96 Z',
+      'M60 96 C 40 94 22 80 16 58 C 34 62 50 76 60 96 Z',
+      'M60 96 C 80 94 98 80 104 58 C 86 62 70 76 60 96 Z',
+      'M30 104 Q 60 113 90 104'
+    ] },
+    rose: { vb: '0 0 100 120', d: [
+      'M30 44 C 24 62 36 76 50 76 C 64 76 76 62 70 44',
+      'M30 44 C 34 32 44 28 50 34 C 56 28 66 32 70 44',
+      'M50 72 C 36 68 32 52 42 44 C 52 38 64 46 58 56 C 54 62 44 60 46 52 C 47 48 53 48 53 52',
+      'M50 76 C 50 90 50 104 49 118',
+      'M49 94 C 40 84 28 86 20 94 C 28 102 42 100 49 94 Z',
+      'M50 106 C 58 98 70 100 78 106 C 70 112 58 112 50 106 Z'
+    ] },
+    tulip: { vb: '0 0 100 120', d: [
+      'M34 38 C 30 58 38 72 50 72 C 62 72 70 58 66 38',
+      'M34 38 C 38 30 46 28 50 38 C 54 28 62 30 66 38',
+      'M50 38 C 46 48 46 62 50 72',
+      'M50 72 C 51 88 50 104 50 118',
+      'M50 100 C 42 88 30 82 24 62 C 36 72 46 86 50 100 Z',
+      'M50 108 C 58 96 70 92 78 76 C 66 84 56 96 50 108 Z'
+    ] },
+    branch: { vb: '0 0 120 160', d: [
+      'M18 152 C 40 112 62 72 102 12',
+      'M44 108 C 32 100 28 88 32 76 C 42 84 46 96 44 108 Z',
+      'M56 90 C 64 78 76 74 88 78 C 80 88 68 92 56 90 Z',
+      'M66 70 C 58 60 56 48 62 38 C 70 46 72 58 66 70 Z',
+      'M78 52 C 86 42 98 36 110 38 C 102 48 90 54 78 52 Z',
+      'M34 130 C 24 124 18 112 20 100 C 30 106 36 118 34 130 Z'
+    ] },
+    daisy: { vb: '0 0 100 100', d: [
+      'M50 40 C 45 30 45 14 50 8 C 55 14 55 30 50 40 Z',
+      'M60 44 C 70 36 82 34 90 40 C 82 48 70 48 60 44 Z',
+      'M60 56 C 70 64 82 66 90 60 C 82 52 70 52 60 56 Z',
+      'M50 60 C 55 70 55 86 50 92 C 45 86 45 70 50 60 Z',
+      'M40 56 C 30 64 18 66 10 60 C 18 52 30 52 40 56 Z',
+      'M40 44 C 30 36 18 34 10 40 C 18 48 30 48 40 44 Z',
+      'M50 58 C 46 58 42 54 42 50 C 42 46 46 42 50 42 C 54 42 58 46 58 50 C 58 54 54 58 50 58 Z'
+    ] }
+  };
+  // sel = sekcja, m = motyw, pos = róg (tl/tr/bl/br), size w px, rot w stopniach, op = krycie, lvl = od którego poziomu
+  var PLACES = [
+    { sel: '.hero',          m: 'branch', pos: 'tl', size: 230, rot: -8,  op: .13, lvl: '2', cls: 'deco--hero' },
+    { sel: '#oferta',        m: 'rose',   pos: 'tr', size: 170, rot: 10,  op: .18, lvl: '2' },
+    { sel: '#oferta',        m: 'branch', pos: 'bl', size: 220, rot: 6,   op: .14, lvl: '3' },
+    { sel: '#galeria',       m: 'lotus',  pos: 'bl', size: 170, rot: 0,   op: .16, lvl: '2' },
+    { sel: '#galeria',       m: 'daisy',  pos: 'tr', size: 120, rot: 15,  op: .16, lvl: '3' },
+    { sel: '#sluby-eventy',  m: 'tulip',  pos: 'tr', size: 160, rot: 12,  op: .18, lvl: '2' },
+    { sel: '#sluby-eventy',  m: 'lotus',  pos: 'bl', size: 190, rot: 0,   op: .14, lvl: '3' },
+    { sel: '#o-nas',         m: 'daisy',  pos: 'tl', size: 130, rot: -20, op: .18, lvl: '2' },
+    { sel: '#o-nas',         m: 'tulip',  pos: 'br', size: 150, rot: -14, op: .16, lvl: '3' },
+    { sel: '#opinie',        m: 'branch', pos: 'br', size: 210, rot: 14,  op: .15, lvl: '2' },
+    { sel: '#opinie',        m: 'daisy',  pos: 'tl', size: 110, rot: 10,  op: .16, lvl: '3' },
+    { sel: '#kontakt',       m: 'rose',   pos: 'bl', size: 160, rot: -10, op: .17, lvl: '2' },
+    { sel: '#kontakt',       m: 'branch', pos: 'tr', size: 200, rot: -12, op: .13, lvl: '3' },
+    { sel: '#faq',           m: 'lotus',  pos: 'br', size: 170, rot: 0,   op: .15, lvl: '3' },
+    { sel: '.cta-band',      m: 'branch', pos: 'tr', size: 190, rot: 10,  op: .22, lvl: '3' },
+    { sel: '.site-footer',   m: 'lotus',  pos: 'br', size: 180, rot: 0,   op: .14, lvl: '3' }
+  ];
+  var decosDone = false;
+  var decoObserver = null;
+
+  function buildDeco(p) {
+    var m = MOTIFS[p.m];
+    var svg = doc.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'deco deco--' + p.pos + (p.cls ? ' ' + p.cls : ''));
+    svg.setAttribute('viewBox', m.vb);
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('data-level', p.lvl);
+    svg.style.setProperty('--size', p.size + 'px');
+    svg.style.setProperty('--rot', p.rot + 'deg');
+    svg.style.setProperty('--op', String(p.op));
+    m.d.forEach(function (d) {
+      var path = doc.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('pathLength', '100');
+      svg.appendChild(path);
+    });
+    return svg;
+  }
+
+  function decorations() {
+    if (decosDone) return;
+    decosDone = true;
+    if ('IntersectionObserver' in window) {
+      decoObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-visible'); decoObserver.unobserve(e.target); } });
+      }, { threshold: .15 });
     }
-    media.appendChild(box);
+    PLACES.forEach(function (p) {
+      var host = doc.querySelector(p.sel);
+      if (!host) return;
+      var svg = buildDeco(p);
+      host.appendChild(svg);
+      if (decoObserver) decoObserver.observe(svg); else svg.classList.add('is-visible');
+    });
   }
 
   /* ---------- 3. Karty oferty wchodzą jedna po drugiej (poziomy 2 i 3) ---------- */
@@ -80,86 +162,7 @@
     });
   }
 
-  /* ---------- 4. Płatki na całej stronie (poziom 3) ---------- */
-  var canvas = null, ctx = null, petals = [], raf = null, running = false;
-  var W = 0, H = 0;
-  var colors = { a: '#E9B9C6', p: '#B8456A' };
-
-  function readColors() {
-    var cs = getComputedStyle(root);
-    colors.a = cs.getPropertyValue('--accent').trim() || colors.a;
-    colors.p = cs.getPropertyValue('--primary').trim() || colors.p;
-    petals.forEach(function (p) { p.color = p.kind === 'a' ? colors.a : colors.p; });
-  }
-
-  function resize() {
-    if (!canvas) return;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth; H = window.innerHeight;
-    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
-    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  function newPetal(spread) {
-    var kind = Math.random() < .72 ? 'a' : 'p';
-    return {
-      kind: kind, color: kind === 'a' ? colors.a : colors.p,
-      x: Math.random() * W, y: spread ? Math.random() * H : -20 - Math.random() * 60,
-      s: 5 + Math.random() * 7, vy: .35 + Math.random() * .7,
-      sway: Math.random() * Math.PI * 2, sv: .008 + Math.random() * .016, sa: .3 + Math.random() * .7,
-      rot: Math.random() * Math.PI * 2, vr: (Math.random() - .5) * .025,
-      alpha: .45 + Math.random() * .4
-    };
-  }
-
-  function frame() {
-    if (!running) return;
-    ctx.clearRect(0, 0, W, H);
-    for (var i = 0; i < petals.length; i++) {
-      var p = petals[i];
-      p.sway += p.sv; p.x += Math.sin(p.sway) * p.sa; p.y += p.vy; p.rot += p.vr;
-      if (p.y > H + 30 || p.x < -40 || p.x > W + 40) { petals[i] = p = newPetal(false); }
-      ctx.save();
-      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-      ctx.globalAlpha = p.alpha; ctx.fillStyle = p.color;
-      ctx.beginPath(); ctx.ellipse(0, 0, p.s * .55, p.s, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.restore();
-    }
-    raf = requestAnimationFrame(frame);
-  }
-
-  function startPetals() {
-    if (running) return;
-    if (!canvas) {
-      canvas = doc.createElement('canvas');
-      canvas.className = 'petals-canvas';
-      canvas.setAttribute('aria-hidden', 'true');
-      doc.body.appendChild(canvas);
-      ctx = canvas.getContext('2d');
-      window.addEventListener('resize', resize);
-    }
-    resize(); readColors();
-    var n = Math.max(10, Math.min(28, Math.round(W / 50)));
-    petals = [];
-    for (var i = 0; i < n; i++) petals.push(newPetal(true));
-    running = true;
-    frame();
-  }
-
-  function stopPetals() {
-    running = false;
-    if (raf) { cancelAnimationFrame(raf); raf = null; }
-    if (canvas) { canvas.parentNode.removeChild(canvas); canvas = null; ctx = null; window.removeEventListener('resize', resize); }
-  }
-
-  doc.addEventListener('visibilitychange', function () {
-    if (level !== '3' || !canvas) return;
-    if (doc.hidden) { running = false; if (raf) { cancelAnimationFrame(raf); raf = null; } }
-    else if (!running) { running = true; frame(); }
-  });
-
-  /* ---------- 5. Parallaksa hero i plam w tle (poziom 3) ---------- */
+  /* ---------- 4. Parallaksa hero i plam w tle (poziom 3) ---------- */
   var parallaxOn = false, ticking = false;
   var heroMedia = doc.querySelector('.hero__media');
   var offer = doc.querySelector('.offer');
@@ -183,7 +186,7 @@
     }
   }
 
-  /* ---------- 6. Ocena nabija się licznikiem (poziom 3) ---------- */
+  /* ---------- 5. Ocena nabija się licznikiem (poziom 3) ---------- */
   var score = doc.querySelector('.rating-card__score');
   var scoreTarget = score ? parseFloat(score.textContent.replace(',', '.')) : 0;
   var scoreDone = false;
@@ -208,7 +211,7 @@
     io.observe(score);
   }
 
-  /* ---------- 7. Gałązki rysujące się między sekcjami (poziom 3) ---------- */
+  /* ---------- 6. Gałązki rysujące się między sekcjami (poziom 3) ---------- */
   var SPRIG = '<svg class="sprig" viewBox="0 0 120 36" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
     '<path pathLength="100" d="M4 31 C 32 30, 64 24, 116 5"/>' +
     '<path pathLength="100" d="M28 29 C 32 20, 41 16, 52 17 C 46 24, 38 28, 28 29 Z"/>' +
@@ -232,12 +235,12 @@
     });
   }
 
-  /* ---------- 8. Przełącznik poziomów ---------- */
+  /* ---------- 7. Przełącznik poziomów ---------- */
   function apply() {
-    heroPetals(level === '2');
     staggerCards(level !== '1');
-    if (level === '3') { startPetals(); parallax(true); sprigs(); armCounter(); }
-    else { stopPetals(); parallax(false); }
+    if (level !== '1') decorations();
+    if (level === '3') { parallax(true); sprigs(); armCounter(); }
+    else { parallax(false); }
   }
 
   function setLevel(l, fromUser) {
@@ -277,11 +280,6 @@
       var target = sw.querySelector('[data-set-motion="' + next + '"]');
       if (target) target.focus();
     });
-  }
-
-  // zmiana odcienia różu → kolory płatków
-  if ('MutationObserver' in window) {
-    new MutationObserver(function () { if (canvas) readColors(); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
   }
 
   if (forced) {
