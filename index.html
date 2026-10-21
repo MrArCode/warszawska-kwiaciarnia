@@ -31,11 +31,10 @@
       var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = HERO[theme]; l.setAttribute('fetchpriority', 'high');
       document.head.appendChild(l);
 
-      // Wejście z logo: raz na sesję przeglądarki (?intro=1 wymusza), nigdy przy ograniczonym ruchu w systemie.
+      // Wejście z logo przy każdym otwarciu strony (?intro=0 wyłącza), nigdy przy ograniczonym ruchu w systemie.
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var seen = null; try { seen = sessionStorage.getItem('wk-intro'); } catch (e) {}
-      var again = new URLSearchParams(location.search).get('intro') === '1';
-      if (!reduce && (!seen || again)) document.documentElement.classList.add('intro-pending');
+      var noIntro = new URLSearchParams(location.search).get('intro') === '0';
+      if (!reduce && !noIntro) document.documentElement.classList.add('intro-pending');
     })();
   </script>
 

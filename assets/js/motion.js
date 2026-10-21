@@ -1,6 +1,6 @@
 /* Warszawska Kwiaciarnia – drobne animacje.
-   1. Wejście z logo (lotos rysuje się kreską, potem odsłania stronę): raz na sesję przeglądarki,
-      kliknięcie lub klawisz je pomija, ?intro=1 w adresie wymusza pokazanie jeszcze raz.
+   1. Wejście z logo (lotos rysuje się kreską, potem odsłania stronę) przy każdym otwarciu strony;
+      kliknięcie lub klawisz je pomija, ?intro=0 w adresie je wyłącza.
       Przy włączonym w systemie ograniczeniu ruchu wejście się nie pokazuje (decyduje skrypt w <head>).
    2. Karty oferty pojawiają się jedna po drugiej.
    Reszta drobnych animacji (przybliżanie zdjęcia w hero, unoszenie kart, pulsująca kropka) jest w CSS. */
@@ -21,7 +21,6 @@
   }
 
   if (root.classList.contains('intro-pending')) {
-    try { sessionStorage.setItem('wk-intro', '1'); } catch (e) {}
     timer = setTimeout(finishIntro, 2700);
     // nasłuch dopiero po chwili, żeby pierwsze kliknięcie nie przerwało wejścia od razu
     setTimeout(function () {
