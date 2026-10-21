@@ -9,11 +9,11 @@
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- 1. Przełącznik motywów (tylko na czas prototypu) ----------
-     Motyw zapisuje się w localStorage i w adresie (?theme=botanical),
+     Wariant zapisuje się w localStorage i w adresie (?theme=raspberry),
      więc można wysłać właścicielce link do konkretnego wariantu.
      Przed wdrożeniem: usunąć ten blok, przełącznik w HTML i skrypt w <head>. */
-  var THEMES = ['pastel', 'botanical', 'premium'];
-  var THEME_NAMES = { pastel: 'Pudrowy róż', botanical: 'Zielnik', premium: 'Nocny ogród' };
+  var THEMES = ['pastel', 'raspberry', 'dusty'];
+  var THEME_NAMES = { pastel: 'Pudrowy róż', raspberry: 'Malinowy', dusty: 'Stary róż' };
   var THEME_KEY = 'wk-theme';
   var heroImg = doc.querySelector('.hero__img');
   var reviewLabel = doc.querySelector('[data-review-label]');

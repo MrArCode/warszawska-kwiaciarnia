@@ -20,14 +20,14 @@
        Kolejność: ?theme= w adresie → zapamiętany wybór → pastel. -->
   <script>
     (function () {
-      var t = ['pastel', 'botanical', 'premium'];
+      var t = ['pastel', 'raspberry', 'dusty'];
       var u = new URLSearchParams(location.search).get('theme');
       var s = null; try { s = localStorage.getItem('wk-theme'); } catch (e) {}
       var theme = t.indexOf(u) > -1 ? u : (t.indexOf(s) > -1 ? s : 'pastel');
       document.documentElement.setAttribute('data-theme', theme);
       document.documentElement.className += ' js';
       // wstępne ładowanie zdjęcia hero właściwego dla motywu
-      var HERO = { pastel: 'assets/img/hero-pastel.webp', botanical: 'assets/img/hero-biale-roze.webp', premium: 'assets/img/mono-czerwone-roze.webp' };
+      var HERO = { pastel: 'assets/img/hero-pastel.webp', raspberry: 'assets/img/galeria-10.webp', dusty: 'assets/img/hero-brzoskwiniowe-roze.webp' };
       var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = HERO[theme]; l.setAttribute('fetchpriority', 'high');
       document.head.appendChild(l);
     })();
@@ -35,8 +35,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Prototyp ładuje fonty wszystkich trzech motywów. Po wyborze motywu zostawić tylko jego dwie rodziny. -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Cormorant:wght@300;400;500&family=Jost:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 
   <script type="application/ld+json">
@@ -134,11 +133,11 @@
           <span class="btn--call__num">791 481 738</span>
         </a>
 
-        <!-- PRZEŁĄCZNIK MOTYWÓW – tylko na czas prototypu. Przed wdrożeniem usunąć cały blok. -->
-        <div class="theme-switch" role="radiogroup" aria-label="Porównaj wersje kolorystyczne">
+        <!-- PRZEŁĄCZNIK WARIANTÓW KOLORU – tylko na czas prototypu. Przed wdrożeniem usunąć cały blok. -->
+        <div class="theme-switch" role="radiogroup" aria-label="Porównaj odcienie różu">
           <button type="button" role="radio" aria-checked="true" data-set-theme="pastel" class="theme-switch__btn theme-switch__btn--pastel" title="Pudrowy róż"><span class="sr-only">Pudrowy róż</span></button>
-          <button type="button" role="radio" aria-checked="false" data-set-theme="botanical" class="theme-switch__btn theme-switch__btn--botanical" title="Zielnik"><span class="sr-only">Zielnik</span></button>
-          <button type="button" role="radio" aria-checked="false" data-set-theme="premium" class="theme-switch__btn theme-switch__btn--premium" title="Nocny ogród"><span class="sr-only">Nocny ogród</span></button>
+          <button type="button" role="radio" aria-checked="false" data-set-theme="raspberry" class="theme-switch__btn theme-switch__btn--raspberry" title="Malinowy"><span class="sr-only">Malinowy</span></button>
+          <button type="button" role="radio" aria-checked="false" data-set-theme="dusty" class="theme-switch__btn theme-switch__btn--dusty" title="Stary róż"><span class="sr-only">Stary róż</span></button>
         </div>
       </div>
     </div>
@@ -170,8 +169,8 @@
           <!-- Jedno zdjęcie na motyw. Jeśli chcesz jedno dla wszystkich, usuń atrybuty data-src-*. -->
           <img class="hero__img" src="assets/img/hero-pastel.webp" width="750" height="1000"
                data-src-pastel="assets/img/hero-pastel.webp" data-alt-pastel="Bukiet pastelowych róż, hortensji i eustomy w różowym papierze, Warszawska Kwiaciarnia"
-               data-src-botanical="assets/img/hero-biale-roze.webp" data-alt-botanical="Bukiet białych róż w jasnym papierze z botanicznym wzorem, Warszawska Kwiaciarnia"
-               data-src-premium="assets/img/mono-czerwone-roze.webp" data-alt-premium="Bukiet czerwonych róż w bordowym papierze, Warszawska Kwiaciarnia"
+               data-src-raspberry="assets/img/galeria-10.webp" data-alt-raspberry="Bukiet różowych hortensji w różowym papierze, Warszawska Kwiaciarnia"
+               data-src-dusty="assets/img/hero-brzoskwiniowe-roze.webp" data-alt-dusty="Bukiet brzoskwiniowych róż w jasnoróżowym papierze, Warszawska Kwiaciarnia"
                alt="Bukiet pastelowych róż, hortensji i eustomy w różowym papierze, Warszawska Kwiaciarnia"
                fetchpriority="high" decoding="async">
           <script>

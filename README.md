@@ -3,16 +3,16 @@
 Jednostronicowa strona dla kwiaciarni na Bemowie (Powstańców Śląskich 24A, naprzeciwko Hali Wola).
 Czysty HTML, CSS i odrobina JS. Bez builda, bez zależności, bez backendu. Działa z pliku, z GitHub Pages i z dowolnego hostingu statycznego.
 
-## Trzy wersje kolorystyczne do porównania
+## Trzy odcienie różu do porównania
 
-Prototyp ma przełącznik motywów (kółka w nagłówku na komputerze, w prawym dolnym rogu na telefonie).
-Każdą wersję można też otworzyć bezpośrednio z linku:
+Prototyp ma przełącznik wariantów (kółka w prawym dolnym rogu ekranu).
+Każdy wariant można też otworzyć bezpośrednio z linku:
 
-| Wersja | Link |
-|---|---|
-| Pudrowy róż (domyślna) | `…/?theme=pastel` |
-| Zielnik | `…/?theme=botanical` |
-| Nocny ogród | `…/?theme=premium` |
+| Wariant | Charakter | Link |
+|---|---|---|
+| Pudrowy róż (domyślny) | jasne pudrowe tło, malinowy kolor główny | `…/?theme=pastel` |
+| Malinowy | chłodniejszy, bardziej nasycony róż | `…/?theme=raspberry` |
+| Stary róż | ciepły, przygaszony, elegancki | `…/?theme=dusty` |
 
 Dodatek `&review=1` pokazuje w rogu etykietę z nazwą aktualnej wersji (przydatne przy omawianiu).
 
@@ -30,7 +30,7 @@ i wejść na <http://localhost:8321>.
 
 ```
 index.html            cała treść strony (sekcje oznaczone komentarzami)
-assets/css/styles.css style; motywy = trzy bloki zmiennych na górze pliku
+assets/css/styles.css style; warianty koloru = trzy bloki zmiennych na górze pliku
 assets/js/main.js     przełącznik motywów, „otwarte teraz”, lightbox, mapa po kliknięciu
 assets/img/           zdjęcia (WebP) ze starej strony i Instagrama kwiaciarni, logo, favicon, og.jpg
 ```
@@ -56,15 +56,14 @@ Na telefonie stały dolny pasek: Zadzwoń · Instagram · Dojazd.
 7. Opinie: zgoda na cytowanie trzech opinii z Google z imionami.
 8. Śluby: ile wyprzedzenia; czy robi dekoracje plenerowe. Firmy: co dokładnie i dla kogo.
 9. Domena kwiaciarniawarszawska.pl: kto ma dostęp do DNS i hostingu home.pl; czy przekierować na nową stronę.
-10. Który motyw (albo mieszanka) i co zmienić w tekstach.
+10. Który odcień różu (albo mieszanka) i co zmienić w tekstach.
 11. Kod pocztowy: stara strona podaje 01-381 – potwierdzić (w sieci pojawia się też 01-355).
 12. Czy odpisuje na wiadomości na Instagramie w godzinach otwarcia (przyciski „Napisz na Instagramie” otwierają od razu wiadomość).
 
 ## Przed wdrożeniem produkcyjnym
 
 - [ ] Usunąć `<meta name="robots" content="noindex">` z `index.html`.
-- [ ] Usunąć przełącznik motywów (`.theme-switch` w HTML, blok 1 w `main.js`, skrypt w `<head>`), zostawić jeden `data-theme` na `<html>`.
-- [ ] Zostawić w linku Google Fonts tylko dwie rodziny wybranego motywu.
+- [ ] Usunąć przełącznik wariantów (`.theme-switch` w HTML, blok 1 w `main.js`, skrypt w `<head>`), zostawić jeden `data-theme` na `<html>` i jeden blok zmiennych w CSS.
 - [ ] Ustawić absolutny adres w `og:image` (po ustaleniu domeny).
 - [ ] Wkleić aktualne opinie i liczby z Google.
 - [ ] Jeśli strona ma iść pod własną domenę: plik `CNAME` w repo i rekordy DNS u operatora domeny.
