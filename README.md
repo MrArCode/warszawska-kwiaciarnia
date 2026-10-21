@@ -24,8 +24,11 @@ a odcień różu i poziom animacji łączą się dowolnie, np. `…/?theme=paste
 | Poziom | Co się dzieje | Link |
 |---|---|---|
 | 1 Spokojny (domyślny) | powolne przybliżanie zdjęcia w hero, unoszenie kart po najechaniu, pulsująca kropka „otwarte”, animowane podkreślenia | `…/?motion=1` |
-| 2 Kwitnący | wejście z rysującym się lotosem, delikatne konturowe roślinki w tle sekcji (róża, lotos, tulipan, gałązka, stokrotka), które rysują się kreską przy przewijaniu, sekcje wchodzą z rozmyciem, karty oferty jedna po drugiej | `…/?motion=2` |
-| 3 Pełnia | więcej i większych roślinek, lekko się kołyszą, gałązki obok nazwy we wejściu, parallaksa zdjęcia hero i plam w tle, ocena nabija się licznikiem, gałązki rysujące się między sekcjami, okazje „rozkwitają” po najechaniu | `…/?motion=3` |
+| 2 Kwitnący | wejście z rysującym się lotosem, delikatne ornamenty roślinne w tle sekcji (koronkowe pasy kwiatów u góry sekcji, pionowa róża i tulipan w rogach) pojawiające się przy przewijaniu, sekcje wchodzą z rozmyciem, karty oferty jedna po drugiej | `…/?motion=2` |
+| 3 Pełnia | ornamenty we wszystkich sekcjach, pasy bardzo powoli dryfują, gałązki obok nazwy we wejściu, parallaksa zdjęcia hero i plam w tle, ocena nabija się licznikiem, okazje „rozkwitają” po najechaniu | `…/?motion=3` |
+
+Ornamenty w `assets/img/ornaments` to grafiki z domeny publicznej (Wikimedia Commons): secesyjne winiety z „Revue de photographie” (1900),
+„Rose ornament, 1905” i „Art Nouveau tulip ornament”. Są malowane kolorem wariantu przez maskę CSS, więc zmieniają barwę razem z odcieniem różu.
 
 Wejście z logo pokazuje się raz na sesję przeglądarki i po każdej zmianie poziomu; kliknięcie je pomija.
 Przy włączonym w systemie ograniczeniu ruchu strona zawsze działa na poziomie 1 bez wejścia.
@@ -46,7 +49,8 @@ i wejść na <http://localhost:8321>.
 index.html            cała treść strony (sekcje oznaczone komentarzami)
 assets/css/styles.css style; warianty koloru = trzy bloki zmiennych na górze pliku
 assets/js/main.js     przełącznik odcieni, „otwarte teraz”, lightbox, mapa po kliknięciu
-assets/js/motion.js   poziomy animacji: wejście z logo, konturowe roślinki w tle, parallaksa, licznik, gałązki
+assets/js/motion.js   poziomy animacji: wejście z logo, ornamenty w tle, parallaksa, licznik
+assets/img/ornaments/ ornamenty roślinne (SVG, domena publiczna) używane na poziomach animacji 2 i 3
 assets/img/           zdjęcia (WebP) ze starej strony i Instagrama kwiaciarni, logo, favicon, og.jpg
 ```
 

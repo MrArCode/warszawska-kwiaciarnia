@@ -607,8 +607,12 @@ body.has-dialog .bottom-bar, body.has-dialog .proto-controls { display: none; }
 @keyframes introOut { to { opacity: 0; visibility: hidden; } }
 @keyframes lotusGlow { from { transform: scale(.92); } to { transform: scale(1); } }
 @keyframes sway {
-  from { transform: rotate(calc(var(--rot, 0deg) - 1.2deg)) translateY(0); }
-  to   { transform: rotate(calc(var(--rot, 0deg) + 1.2deg)) translateY(-5px); }
+  from { transform: rotate(-1.2deg) translateY(0); }
+  to   { transform: rotate(1.2deg) translateY(-5px); }
+}
+@keyframes drift {
+  from { transform: translateX(-14px); }
+  to   { transform: translateX(14px); }
 }
 
 /* poziom 1 – lekkie */
@@ -631,27 +635,42 @@ html.js:is([data-motion="2"], [data-motion="3"]) .card[data-reveal].is-visible {
   transition: transform .25s ease, box-shadow .25s ease, opacity .7s ease, filter .7s ease;
 }
 
-/* poziomy 2 i 3 – konturowe roślinki w tle (wstawia je motion.js) */
+/* poziomy 2 i 3 – ornamenty roślinne w tle (wstawia je motion.js; grafiki w assets/img/ornaments, domena publiczna)
+   Ornament to maska CSS wypełniona kolorem wariantu, więc zmienia kolor razem z odcieniem różu. */
 .section, .hero, .cta-band, .site-footer { position: relative; isolation: isolate; }
-.deco {
-  position: absolute; z-index: -1; width: var(--size, 160px); height: auto; overflow: visible; pointer-events: none;
-  color: var(--primary); opacity: var(--op, .18); transform: rotate(var(--rot, 0deg));
-  fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round;
+.orn {
+  position: absolute; z-index: -1; pointer-events: none; opacity: 0;
+  transition: opacity 1.4s ease, transform 1.4s ease;
 }
-.deco--tl { top: 20px; left: 20px; }
-.deco--tr { top: 20px; right: 20px; }
-.deco--bl { bottom: 20px; left: 20px; }
-.deco--br { bottom: 20px; right: 20px; }
-.deco path { stroke-dasharray: 100; stroke-dashoffset: 100; }
-.deco.is-visible path { animation: draw 1.6s ease-out forwards; animation-delay: calc(var(--i, 0) * .12s); }
-html[data-motion="1"] .deco { display: none; }
-html:not([data-motion="3"]) .deco[data-level="3"] { display: none; }
-html[data-motion="3"] .deco { width: calc(var(--size, 160px) * 1.15); animation: sway 12s ease-in-out infinite alternate; }
-.cta-band .deco { color: var(--primary-text); }
+.orn.is-visible { opacity: var(--op, .22); transform: none; }
+.orn__img {
+  display: block; width: 100%; height: 100%; background: var(--primary);
+  -webkit-mask: var(--img) center / contain no-repeat; mask: var(--img) center / contain no-repeat;
+}
+.cta-band .orn__img { background: var(--primary-text); }
+/* pas u góry sekcji, wygaszony na brzegach */
+.orn--band {
+  top: 10px; left: 50%; width: min(1180px, 96vw); height: clamp(44px, 9vw, 118px);
+  transform: translate(-50%, 10px);
+  -webkit-mask: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  mask: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+}
+.orn--band.is-visible { transform: translate(-50%, 0); }
+.orn--band.orn--bottom { top: auto; bottom: 10px; }
+/* ozdoba narożna (pionowa) */
+.orn--corner { width: var(--w, 70px); height: var(--h, 300px); transform: translateY(10px); }
+.orn--bl { bottom: 16px; left: 10px; }
+.orn--br { bottom: 16px; right: 10px; }
+.orn--tr { top: 16px; right: 10px; }
+.orn--tl { top: 16px; left: 10px; }
+html[data-motion="1"] .orn { display: none; }
+html:not([data-motion="3"]) .orn[data-level="3"] { display: none; }
+/* poziom 3: pasy bardzo powoli dryfują, ozdoby narożne lekko się kołyszą */
+html[data-motion="3"] .orn--band .orn__img { animation: drift 26s ease-in-out infinite alternate; }
+html[data-motion="3"] .orn--corner.is-visible { animation: sway 14s ease-in-out infinite alternate; }
 @media (max-width: 899px) {
-  .deco--hero { display: none !important; }
-  .deco { width: calc(var(--size, 160px) * .6); }
-  html[data-motion="3"] .deco { width: calc(var(--size, 160px) * .7); }
+  .orn--hero { display: none !important; }
+  .orn--corner { width: calc(var(--w, 70px) * .7); height: calc(var(--h, 300px) * .7); }
 }
 
 /* poziomy 2 i 3 – wejście z logo */
@@ -691,15 +710,6 @@ html[data-motion="3"].intro-pending .intro__sprig path:nth-child(5) { animation-
 /* poziom 3 – pełnia */
 html[data-motion="3"] .hero__media { will-change: transform; }
 html[data-motion="3"] .offer::before, html[data-motion="3"] .offer::after { transform: translateY(var(--blob-y, 0px)); }
-.sprig-wrap { display: none; height: 0; justify-content: center; transform: translateY(calc(clamp(56px, 8vw, 104px) / -2)); }
-html[data-motion="3"] .sprig-wrap { display: flex; }
-.sprig { width: 120px; height: 36px; margin-top: -18px; color: var(--primary); opacity: .75; }
-.sprig path { stroke-dasharray: 100; stroke-dashoffset: 100; }
-.sprig-wrap.is-visible .sprig path { animation: draw 1.4s ease-out forwards; }
-.sprig-wrap.is-visible .sprig path:nth-child(2) { animation-delay: .5s; }
-.sprig-wrap.is-visible .sprig path:nth-child(3) { animation-delay: .7s; }
-.sprig-wrap.is-visible .sprig path:nth-child(4) { animation-delay: .6s; }
-.sprig-wrap.is-visible .sprig path:nth-child(5) { animation-delay: .9s; }
 html[data-motion="3"] .occasions .flower { display: inline-block; transition: transform .5s ease; }
 html[data-motion="3"] .occasion:hover + .flower, html[data-motion="3"] .flower:hover { transform: rotate(180deg) scale(1.5); }
 
@@ -709,11 +719,11 @@ html[data-motion="3"] .occasion:hover + .flower, html[data-motion="3"] .flower:h
   *, *::before, *::after { transition: none !important; animation: none !important; }
   .js [data-reveal] { opacity: 1; transform: none; filter: none; }
   .card__link:hover .card__media img, .gallery__grid a:hover img { transform: none; }
-  .intro, .deco, .sprig-wrap { display: none !important; }
+  .intro, .orn { display: none !important; }
 }
 @media print {
   .site-header__actions, .bottom-bar, .proto-controls, .review-label, .skip-link, .gallery__more, .offer__hint,
-  .intro, .deco, .sprig-wrap { display: none !important; }
+  .intro, .orn { display: none !important; }
   .site-footer { padding-bottom: 24px; }
   .js [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
 }
