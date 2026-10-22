@@ -77,5 +77,10 @@ Na telefonie stały dolny pasek: Zadzwoń · Instagram · Dojazd.
 
 ## GitHub Pages
 
-Repozytorium publiczne, gałąź `main`, katalog główny. Wszystkie ścieżki są względne, więc strona działa pod
-`https://<użytkownik>.github.io/<repo>/` bez żadnych zmian.
+Prototyp jest opublikowany pod adresem <https://mrarcode.github.io/warszawska-kwiaciarnia/>
+(repozytorium: <https://github.com/MrArCode/warszawska-kwiaciarnia>, gałąź `main`, katalog główny).
+Każde wypchnięcie do `main` publikuje nową wersję po ok. minucie. Wszystkie ścieżki są względne, więc strona
+działa pod ścieżką repozytorium bez żadnych zmian. Odcienie do porównania:
+<https://mrarcode.github.io/warszawska-kwiaciarnia/?theme=pastel>,
+<https://mrarcode.github.io/warszawska-kwiaciarnia/?theme=raspberry>,
+<https://mrarcode.github.io/warszawska-kwiaciarnia/?theme=dusty>.
